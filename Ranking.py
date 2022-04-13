@@ -20,7 +20,6 @@ class Ranking:
             ordered_list = list(self.df.iloc[i].sort_values(ascending=True).index)
         return ordered_list
 
-
     def get_vertical_rankings(self):
         columns = list(self.df.columns)
         rows = list(self.df.index)
