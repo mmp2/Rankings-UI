@@ -8,8 +8,12 @@ class Review:
         """
         self.reviewer = reviewer
         self.proposal = proposal
-        self.text = review
-
+        self.text = review  
+        # needs also ratings in various categories
+        self.ratingOverall = 0   
+        self.ratingIntelMerit = 0   
+        self.ratingBroaderI = 0   
+        self.ratingWriting = 0   
     def get_review(self):
         return self.text
     

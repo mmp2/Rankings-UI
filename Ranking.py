@@ -1,9 +1,5 @@
 import pandas as pd
-
-/* Ranking must contain a single ordered list, e.g. Murray\'s ranking. I believe it is best
-not to contain locations for the proposal_boxes.
-*/
-
+# I guess this class must be revised...
 class Ranking:
     def __init__(self, file_path):
         self.df = pd.read_csv(file_path, header=0, index_col=0)
