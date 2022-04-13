@@ -1,5 +1,6 @@
 from tkinter import *
- 
+/*  displaying a table is just the first step. in the immediate future each Proposal_box will have its own location on screen/ 
+*/
  
 class Table:
      
