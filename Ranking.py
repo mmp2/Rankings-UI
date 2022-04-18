@@ -9,12 +9,6 @@ class Ranking:
 
     def get_num_rows(self):
         return len(self.df.columns)
-    
-    def get_all_rankings(self): #not sure what this function does; no need for a sorting function in Ranking
-        rows = list(self.df.index)
-        for i in range(len(rows)):          
-            ordered_list = list(self.df.iloc[i].sort_values(ascending=True).index)
-        return ordered_list
 
     def get_vertical_rankings(self):
         columns = list(self.df.columns)
