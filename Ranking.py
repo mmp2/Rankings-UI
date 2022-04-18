@@ -1,6 +1,6 @@
 import pandas as pd
-# I guess this class must be revised...
-class Ranking:
+
+class rankings:
     def __init__(self, file_path):
         self.df = pd.read_csv(file_path, header=0, index_col=0)
 
