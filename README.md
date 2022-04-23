@@ -8,10 +8,11 @@ NOTE for Mac users. On my Mac book Pro, no combination works for "right clicking
 
 TO DO's
 
-* create Review_box class and give it attributes. 
-* write a function that takes ratings and maps them to attributes.  e.g. FQ --> frame width
-* edit the input csv file, and make sure that OP is consistent with the rankings. (i.e. if OP(Chipotle) > OP( Xi'an) then Chipotle is higher ranked than Xi'an.
+* edit the input csv file, and make sure that OP is consistent with the rankings. (i.e. if OP(Chipotle) > OP( Xi'an) then Chipotle is higher ranked than Xi'an. (DONE?)
 * now we want the rankings to look less like a table, so control the box width to leave some space between columns.
-* and now plot the y values of the proposals in each ranking according to both the rating and the ranking.
+* also, add a "short name" field to Proposal, which should appear in the box. Currently the boxes are sized by the text size; they should have a size determined by Ranking, which in turn will get it from the higher level function such as main(), and the text should be trimmed to fit in.
+* and now plot the proposals with x values slightly perturbed, so they don't appear exactly aligned. at the moment this doesn't mean anything, but we will want to allow for left-right movement of the boxes. 
+* the rating bands must show (on the left) the rating value. How about a large, semitransparent digit (e.g. 5, 4, ..) left of the rankings?
+* it will be nicer to have the bands not by separating them with lines, but as bands with different shades of gray (you can just alternate two shades, as long as on the left one can see the rating value. 
 
 
