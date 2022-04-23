@@ -10,7 +10,6 @@ from Proposal import Proposal
 from Ranking import rankings
 from Review import review
 from Ratings import ratings
-from canvas_box import proposal_box
 from Proposal_Box import Proposal_Box
 
 FQ_COLOR_DICT = {
@@ -55,7 +54,7 @@ class GUI:
             for j in range(len(rates)):
                 rate = rates[j]
                 for k in range(len(op_dict[keys[i]][rates[j]])):
-                    self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (i*200, i*200+200, 40+(5-rate)*20*num_most+k*20, 60+(5-rate)*20*num_most+k*20)
+                    self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (i*200, i*200+180, 40+(5-rate)*20*num_most+k*20, 60+(5-rate)*20*num_most+k*20)
         self.lines_pos = []
         for rate in range(5):
             self.lines_pos.append((0, 30+rate*20*num_most, 2200, 30+rate*20*num_most))
@@ -67,7 +66,7 @@ class GUI:
         reviewer_boxes = []
         self.get_all_pos()
         for i in range(len(self.columns)):
-            box = Proposal_Box(self.canvas, self.columns[i], (i*200, i*200+200, 0, 20))
+            box = Proposal_Box(self.canvas, self.columns[i], (i*200, i*200+180, 0, 20))
             reviewer_boxes.append(box)
         for pair in self.pos.keys():   
             color = self.get_color(pair[0], pair[1])
