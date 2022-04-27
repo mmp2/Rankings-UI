@@ -207,7 +207,7 @@ class GUI:
 
 
     def set_up(self):
-        self.canvas.bind("<Button-3>", self.do_popup)
+        self.canvas.bind("<Button-2>", self.do_popup)
         #self.tree.bind("<ButtonPress-1>", self.bDown)
         self.canvas.bind("<ButtonRelease-1>",self.ret_colors)
         #self.tree.bind("<Motion>", self.bMotion)
