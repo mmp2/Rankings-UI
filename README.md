@@ -4,7 +4,7 @@ This is a ranking UI that can visualize a CSV file that contains the reviews and
 
 Run the main.py file and then type in the CSV file name without any punctuation.(give an example here)
 
-NOTE for Mac users. On my Mac book Pro, no combination works for "right clicking" on a reviewed item. I connect a _classic mouse_ and use the _middle button_. 
+NOTE for Mac users. On my Mac book Pro, no combination works for "right clicking" on a reviewed item. I connect a _classic mouse_ and use the _middle button_. **(It should be working now, and it works on my MacBook. I used the double finger to touch the touchpad. But the window user should click the scroll of the mouse.)**
 
 TO DO's
 
