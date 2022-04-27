@@ -9,6 +9,7 @@ class Proposal:
         """
         self.reviewer = reviewers
         self.name = name
+        self.short_name = None
         self.review = reviews
 
     def get_name(self):

@@ -4,13 +4,20 @@ import numpy as np
 
 
 class rankings:
-    def __init__(self, file_path, op_path, other_paths):
+    def __init__(self, file_path, other_paths):
         self.df = pd.read_csv(file_path, header=0, index_col=0)
-        self.op = pd.read_csv(op_path, header=0, index_col=0)
         self.rating_names = list(other_paths.keys())
         self.ratings = {}
         for rate_name in other_paths.keys():
             self.ratings[rate_name] = pd.read_csv(other_paths[rate_name], header=0, index_col=0)
+        
+        self.op = self.ratings["OP"]
+
+    def get_all_sub_ratings(self):
+        return self.rating_names
+    
+    def get_sub_rating(self, rat_name, reviewer, prop):
+        return self.ratings[rat_name].loc[reviewer, prop]
 
     def get_columns(self):
         return list(self.df.index)
