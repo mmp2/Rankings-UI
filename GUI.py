@@ -237,6 +237,7 @@ class GUI:
 
     def child_window_prop(self, title, text):
         win2 = Toplevel()
+        win2.title('Proposal Details')
         T = Text(win2, height=20, width=52)
         # Create label
         l = Label(win2, text=title)
@@ -250,6 +251,7 @@ class GUI:
 
     def child_window_ratings(self, name, reviewer, proposal):
         win2 = Toplevel()
+        win2.title('Ratings Details')
         Label(win2, text=name).pack()
         treeScroll = ttk.Scrollbar(win2)
         treeScroll.pack(side=RIGHT, fill=Y)
@@ -271,6 +273,7 @@ class GUI:
 
     def child_window_text(self, title, text):
         win2 = Toplevel()
+        win2.title('Review Details')
         T = Text(win2, height=20, width=52)
         # Create label
         l = Label(win2, text=title)
