@@ -10,7 +10,8 @@ class rankings:
         for rate_name in other_paths.keys():
             self.ratings[rate_name] = pd.read_csv(other_paths[rate_name], header=0, index_col=0)
         
-        self.op = self.ratings["OP"]
+
+        self.op = self.ratings[self.rating_names[0]]
 
     def get_all_sub_ratings(self):
         return self.rating_names
@@ -23,16 +24,6 @@ class rankings:
 
     def get_num_rows(self):
         return len(self.df.columns)
-
-    def get_vertical_rankings(self):
-        columns = list(self.df.columns)
-        rows = list(self.df.index)
-        ret_list = [ [] for _ in range(len(columns)) ]
-        for i in range(len(rows)):
-            ordered_list = list(self.df.iloc[i].sort_values(ascending=True).index)
-            for j in range(len(ordered_list)):
-                ret_list[j].append(ordered_list[j])
-        return ret_list
 
     def get_all_rankings(self):
         rows = list(self.df.index)
@@ -59,6 +50,3 @@ class rankings:
                         if len(ret[reviewer][rate]) > maxi:
                             maxi = len(ret[reviewer][rate])
         return ret, maxi
-
-    def get_fq_rating(self, reviewer, prop):
-        return self.ratings["FQ"].loc[reviewer, prop]

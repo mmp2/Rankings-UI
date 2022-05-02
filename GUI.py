@@ -4,25 +4,59 @@ import tkinter as tk
 import sys
 
 import numpy as np
-from Proposal import Proposal
+from Proposal import proposal
 from Ranking import rankings
 from Review import review
-from Ratings import ratings
 from Proposal_Box import Proposal_Box
 
-FQ_COLOR_DICT = {
-    5 : "lightgreen",
-    4 : "lightblue",
-    1 : "gainsboro",
-    2 : "yellow",
-    3 : "pink",
-    0 : "white"
+BOX_COLOR_DICT = {
+    5 : "white",
+    4 : "wheat1",
+    3 : "wheat2",
+    2 : "wheat3",
+    1 : "wheat4",
 }
 
+OUTLINE_DICT = {
+    5 : "blue",
+    4 : "red",
+    3 : "purple",
+    2 : "grey",
+    1 : "black",
+
+}
+
+DELTA_X = 0
+BOX_WIDTH = 200
+BOX_HEIGHT = 20
+BOX_DISTANCE_X = 50
+BOX_DISTANCE_Y = 10
+
+X_COOR_DICT = {
+    5 : 2*DELTA_X,
+    4 : DELTA_X,
+    1 : -2*DELTA_X,
+    2 : -DELTA_X,
+    3 : 0,
+    0 : 0
+}
+
+DASH_DICT = {
+    5: (5,1),
+    4: (4,1),
+    3: (3,1),
+    2: (2,1),
+    1: (1,1)
+}
+
+
+
 class GUI:
-    def __init__(self, ranking_path, reviews_path, ratings_paths) -> None:
+    def __init__(self, ranking_path, reviews_path, ratings_paths, proposals_path, rating_to_attr) -> None:
+        self.rat_to_attr = rating_to_attr
         self.rankings = rankings(ranking_path, ratings_paths)
         self.reviews = review(reviews_path)
+        self.props: proposal() = None   # Not Implemented Yet.
 
         self.root = Tk()
         self.root.title('Rankings UI')
@@ -55,14 +89,6 @@ class GUI:
         for i in range(1, 6):
             Label(self.root,text=str(i),font=("Arial", 25)).place(x=0, y=self.lines_pos[i-1][1])
 
-    def init_buttons(self):
-        but_list = []
-        for i in range(len(self.columns)):
-            button = Button(self.root, text="Switch To Left")
-            button.place(x=i*200, y=20)
-            but_list.append(button)
-            #box = Proposal_Box(self.canvas, reviewer=self.columns[i], pos=(i*200, i*200+180, 0, 20))
-
     def get_all_pos(self):
         op_dict, num_most = self.rankings.get_op_rankings()
         num_most += 1
@@ -73,21 +99,36 @@ class GUI:
             for j in range(len(rates)):
                 rate = rates[j]
                 for k in range(len(op_dict[keys[i]][rates[j]])):
-                    self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (i*200+50, i*200+230, 40+(5-rate)*20*num_most+k*20, 60+(5-rate)*20*num_most+k*20)
+                    x_coord_rat = self.rankings.get_sub_rating(self.rat_to_attr["x_coord"], keys[i], op_dict[keys[i]][rates[j]][k])
+                    print(x_coord_rat)
+                    delta_x = self.get_delta_x(x_coord_rat)
+                    self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (50+i*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 50+(i+1)*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 2*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT*num_most)+k*(BOX_HEIGHT+BOX_DISTANCE_Y), 3*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT*num_most)+k*(BOX_HEIGHT+BOX_DISTANCE_Y))
         self.lines_pos = []
         for rate in range(5):
-            self.lines_pos.append((0, 30+rate*20*num_most, 2200, 30+rate*20*num_most))
+            self.lines_pos.append((0, 3*BOX_DISTANCE_Y+rate*BOX_HEIGHT*num_most, 2200, 3*BOX_DISTANCE_Y+rate*BOX_HEIGHT*num_most))
 
+    def get_delta_x(self, rating):
+        return X_COOR_DICT[rating]
+
+    def get_dash(self, reviewer, prop):
+        rating = self.rankings.get_sub_rating(self.rat_to_attr["dash"], reviewer, prop)
+        return DASH_DICT[rating]
+
+    def get_outline(self, reviewer, prop):
+        rating = self.rankings.get_sub_rating(self.rat_to_attr["outline"], reviewer, prop)
+        return OUTLINE_DICT[rating]
 
     def intial_canvas(self):
-        reviewer_boxes = []
+        #reviewer_boxes = []
         self.get_all_pos()
         for i in range(len(self.columns)):
-            box = Proposal_Box(self.canvas, reviewer=self.columns[i], pos=(i*200+50, i*200+230, 0, 20))
-            reviewer_boxes.append(box)
+            box = Proposal_Box(self.canvas, reviewer=self.columns[i], pos=(i*BOX_WIDTH+50+i*BOX_DISTANCE_X, (i+1)*BOX_WIDTH+50+i*BOX_DISTANCE_X, 0, BOX_HEIGHT))
+            #reviewer_boxes.append(box)
         for pair in self.pos.keys():   
-            color = self.get_color(pair[0], pair[1])
-            box = Proposal_Box(self.canvas, pair[0], self.pos[pair], pair[1], color)
+            color = self.get_box_color(pair[0], pair[1])
+            dash = self.get_dash(pair[0], pair[1])
+            outline = self.get_outline(pair[0], pair[1])
+            box = Proposal_Box(self.canvas, pair[0], self.pos[pair], pair[1], color, dash, outline)
         for line in self.lines_pos:
             self.canvas.create_line(line[0], line[1], line[2], line[3], width=1.5, fill="gray")
 
@@ -125,11 +166,11 @@ class GUI:
             self.columns[index-1] = cur_rev
 
 
-    def get_color(self, reviewer, proposal):
+    def get_box_color(self, reviewer, proposal):
         """
         returns the color of a given proposal box based on its FQ ranking.
         """
-        return FQ_COLOR_DICT[self.rankings.get_fq_rating(reviewer, proposal)]
+        return BOX_COLOR_DICT[self.rankings.get_sub_rating(self.rat_to_attr["box_bgc"],reviewer, proposal)]
         
 
     def get_pos(self, reviewer, proposal):
@@ -158,7 +199,7 @@ class GUI:
         
         self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
         self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
-        self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(reviewer, prop)) # , command=next) etc...
+        self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
 
         self.popup.add_separator()
         self.popup.add_command(label="Exit", command=lambda: self.closeWindow())
@@ -169,6 +210,26 @@ class GUI:
 
     def rating_detail(self, reviewer, prop):
         self.child_window_ratings("Rating Details", reviewer, prop)
+
+
+    def proposal_detail(self, prop):
+        if self.props is None:
+            text = "No Information Now."
+        else:
+            text = self.props.get_detail(prop)
+        self.child_window_prop(f"Details of {prop}", text)
+
+    def child_window_prop(self, title, text):
+        win2 = Toplevel()
+        T = Text(win2, height=20, width=52)
+        # Create label
+        l = Label(win2, text=title)
+        l.pack()
+        T.pack()
+        l.config(font =("Times", "24", "bold"))
+        T.config(font =("Times", "16"))
+        T.insert(tk.END, text)
+
 
 
     def child_window_ratings(self, name, reviewer, proposal):
@@ -228,7 +289,7 @@ class GUI:
         all_items = self.canvas.find_withtag(prop)
         for item in all_items:
             reviewer = self.canvas.gettags(item)[0]
-            self.canvas.itemconfig(item, fill=self.get_color(reviewer, prop))
+            self.canvas.itemconfig(item, fill=self.get_box_color(reviewer, prop))
 
 
     def show(self):
