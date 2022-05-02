@@ -1,3 +1,4 @@
+  
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
@@ -26,7 +27,7 @@ OUTLINE_DICT = {
 
 }
 
-DELTA_X = 0
+DELTA_X = -10
 BOX_WIDTH = 200
 BOX_HEIGHT = 20
 BOX_DISTANCE_X = 50
@@ -42,11 +43,11 @@ X_COOR_DICT = {
 }
 
 DASH_DICT = {
-    5: (5,1),
-    4: (4,1),
-    3: (3,1),
-    2: (2,1),
-    1: (1,1)
+    5: (),
+    4: (50,100),
+    3: (40,20, 8, 10, 40, 6, 35,7,65,2),
+    2: (30,10, 2, 1),
+    1: (5,5)
 }
 
 
@@ -60,7 +61,7 @@ class GUI:
 
         self.root = Tk()
         self.root.title('Rankings UI')
-        self.root.geometry('800x600')
+        self.root.geometry('800x700')
         self.root['bg'] = '#AC99F2' # Background Color of the entire UI
 
         # Set Scroll Bar
@@ -72,26 +73,34 @@ class GUI:
 
         self.columns = self.rankings.get_columns()
         self.overall_rankings = self.rankings.get_all_rankings()
-        self.canvas = tk.Canvas(self.root, width=800, height=600, bg="white", yscrollcommand=self.scrlbar2.set, xscrollcommand=self.scrlbar.set,
+        self.canvas = tk.Canvas(self.root, width=800, height=700, bg="white", yscrollcommand=self.scrlbar2.set, xscrollcommand=self.scrlbar.set,
                         confine=False, scrollregion=(0,0,1000,600))
         #button1 = Button(self.root, text="Switch To Left")
         #button1.place(x=25, y=100)
-        self.canvas.pack()
-        self.scrlbar2.config(command=self.canvas.yview)
-        self.scrlbar.config(command=self.canvas.xview)
 
         self.intial_canvas()
         #self.init_buttons()
         self.init_number()
+
+        self.scrlbar2.config(command=self.canvas.yview)
+        self.scrlbar.config(command=self.canvas.xview)
+        self.canvas.pack()
+
+
         self.set_up()
 
     def init_number(self):
         for i in range(1, 6):
-            Label(self.root,text=str(i),font=("Arial", 25)).place(x=0, y=self.lines_pos[i-1][1])
+            y0 = self.lines_pos[i-1][1]
+            y1 = self.lines_pos[i-1][1]+40
+            #self.canvas.create_rectangle(x0, y0, x1, y1)
+            self.canvas.create_text(15,(y0+y1)//2, text=str(6-i), font=("Arial", 25))
+            #l = Label(self.canvas,text=str(6-i),)
+            #l.place(x=0, y=self.lines_pos[i-1][1])
+            #l.config(yscrollcommand=self.scrlbar2.set)
 
     def get_all_pos(self):
         op_dict, num_most = self.rankings.get_op_rankings()
-        num_most += 1
         self.pos = {}
         keys = list(op_dict.keys())
         for i in range(len(keys)):
@@ -100,12 +109,18 @@ class GUI:
                 rate = rates[j]
                 for k in range(len(op_dict[keys[i]][rates[j]])):
                     x_coord_rat = self.rankings.get_sub_rating(self.rat_to_attr["x_coord"], keys[i], op_dict[keys[i]][rates[j]][k])
-                    print(x_coord_rat)
                     delta_x = self.get_delta_x(x_coord_rat)
-                    self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (50+i*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 50+(i+1)*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 2*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT*num_most)+k*(BOX_HEIGHT+BOX_DISTANCE_Y), 3*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT*num_most)+k*(BOX_HEIGHT+BOX_DISTANCE_Y))
+                    self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (50+i*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 50+(i+1)*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 
+                                2*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+k*(BOX_HEIGHT+BOX_DISTANCE_Y)+(5-rate)*BOX_DISTANCE_Y,
+                                3*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+k*(BOX_HEIGHT+BOX_DISTANCE_Y)+(5-rate)*BOX_DISTANCE_Y)
         self.lines_pos = []
+        self.ver_lin_pos = []
         for rate in range(5):
-            self.lines_pos.append((0, 3*BOX_DISTANCE_Y+rate*BOX_HEIGHT*num_most, 2200, 3*BOX_DISTANCE_Y+rate*BOX_HEIGHT*num_most))
+            self.lines_pos.append((0, BOX_DISTANCE_Y+BOX_HEIGHT+rate*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+rate*BOX_DISTANCE_Y, 2200, BOX_DISTANCE_Y+BOX_HEIGHT+rate*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+rate*BOX_DISTANCE_Y))
+            
+        for i in range(len(self.columns)):
+            self.ver_lin_pos.append((i*BOX_WIDTH+50+i*BOX_DISTANCE_X, 0, i*BOX_WIDTH+50+i*BOX_DISTANCE_X, 2200))
+            self.ver_lin_pos.append(((i+1)*BOX_WIDTH+50+i*BOX_DISTANCE_X, 0, (i+1)*BOX_WIDTH+50+i*BOX_DISTANCE_X, 2200))
 
     def get_delta_x(self, rating):
         return X_COOR_DICT[rating]
@@ -131,7 +146,8 @@ class GUI:
             box = Proposal_Box(self.canvas, pair[0], self.pos[pair], pair[1], color, dash, outline)
         for line in self.lines_pos:
             self.canvas.create_line(line[0], line[1], line[2], line[3], width=1.5, fill="gray")
-
+        for ver_line in self.ver_lin_pos:
+            self.canvas.create_line(ver_line[0], ver_line[1], ver_line[2], ver_line[3], width=1, fill="skyblue3", dash=(1,2))
     def selectItem(self, event):
         x = self.canvas.canvasx(event.x)
         y = self.canvas.canvasy(event.y)
@@ -157,10 +173,10 @@ class GUI:
         index = self.columns.index(cur_rev)
         if index != 0:  
             left_rev = self.columns[index-1]
-            self.canvas.move(left_rev, 200, 0)
-            self.canvas.move(cur_rev+"text", -200, 0)
-            self.canvas.move(left_rev+"text", 200, 0)
-            self.canvas.move(cur_rev, -200, 0)
+            self.canvas.move(left_rev, BOX_WIDTH+BOX_DISTANCE_X, 0)
+            self.canvas.move(cur_rev+"text", -(BOX_WIDTH+BOX_DISTANCE_X), 0)
+            self.canvas.move(left_rev+"text", BOX_WIDTH+BOX_DISTANCE_X, 0)
+            self.canvas.move(cur_rev, -(BOX_WIDTH+BOX_DISTANCE_X), 0)
 
             self.columns[index] = left_rev
             self.columns[index-1] = cur_rev
@@ -238,14 +254,12 @@ class GUI:
         treeScroll = ttk.Scrollbar(win2)
         treeScroll.pack(side=RIGHT, fill=Y)
         col_names = self.rankings.get_all_sub_ratings()
-        print(col_names)
         tree = ttk.Treeview(win2,columns=col_names, show="headings", yscrollcommand = treeScroll)
         rating = []
         for rate_name in col_names:
             rating.append(self.rankings.get_sub_rating(rate_name, reviewer, proposal))
         for col in col_names:
             tree.heading(col, text=col)
-        print(rating)
         tree.insert('', 'end', iid='line1', values=tuple(rating))
         tree.pack(side=LEFT, fill=BOTH)
         treeScroll.config(command=tree.yview)

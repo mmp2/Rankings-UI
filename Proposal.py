@@ -1,16 +1,16 @@
 
 class proposal:
-    def __init__(self, proposal_path) -> None:
+    def __init__(self, name, reviewers, reviews) -> None:
         """
-        Not implemented yet, since not sure about the input format of the proposals.
-        
+        reviewers: a list of reviewers
+        reviews: a list of reviews each of which is written by the corresponding reviewer 
+        with the same index as in the reviewers list.
+        name: the name of current proposal
         """
-        self.props: list() = None
-        self.short_names: dict() = None
-        self.details: dict() = None
+        self.reviewer = reviewers
+        self.name = name
+        self.short_name = None
+        self.review = reviews
 
-    def short_name(self, prop):
-        return self.short_names[prop]
-
-    def get_detail(self, prop):
-        return self.details[prop]
+    def get_name(self):
+        return self.name

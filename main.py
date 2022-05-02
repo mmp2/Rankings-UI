@@ -9,7 +9,6 @@ OVERALL_RANKINGS_PATH = "WXML dataset - OP Ranking.csv"
 OS_RATINGS_PATH = "OS Ratings.csv"
 ST_RATINGS_PATH = "ST Ratings.csv"
 
-
 PROPOSAL_PATH = None
 
 RATING_PATHS = {
