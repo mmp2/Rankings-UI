@@ -1,0 +1,3 @@
+Reviewer Email	Left	Operator	Right
+xxx@gmail.com	1	Comparable	X
+bbb@uchicago.edu	1	PreferredOver	X
