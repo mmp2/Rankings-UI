@@ -5,8 +5,6 @@ import tkinter as tk
 import sys
 
 import numpy as np
-from pyparsing import infix_notation
-from pyrsistent import v
 from Proposal import proposal
 from Ranking import rankings
 from Review import review
