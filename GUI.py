@@ -5,6 +5,8 @@ import tkinter as tk
 import sys
 
 import numpy as np
+from pyparsing import infix_notation
+from pyrsistent import v
 from Proposal import proposal
 from Ranking import rankings
 from Review import review
@@ -24,10 +26,9 @@ OUTLINE_DICT = {
     3 : "purple",
     2 : "grey",
     1 : "black",
-
 }
 
-DELTA_X = -10
+DELTA_X = 0
 BOX_WIDTH = 200
 BOX_HEIGHT = 20
 BOX_DISTANCE_X = 50
@@ -42,12 +43,20 @@ X_COOR_DICT = {
     0 : 0
 }
 
+WIDTH_DICT = {
+    5: 7,
+    4: 5,
+    3: 3,
+    2: 1,
+    1: 0
+}
+
 DASH_DICT = {
     5: (),
-    4: (50,100),
-    3: (40,20, 8, 10, 40, 6, 35,7,65,2),
+    4: (5),
+    3: (50, 50, 2),
     2: (30,10, 2, 1),
-    1: (5,5)
+    1: (255,255, 20, 255,255)
 }
 
 
@@ -55,6 +64,13 @@ DASH_DICT = {
 class GUI:
     def __init__(self, ranking_path, reviews_path, ratings_paths, proposals_path, rating_to_attr) -> None:
         self.rat_to_attr = rating_to_attr
+        self.attr_to_dict = {
+            "Bands": None,
+            "Box_Background_Color": BOX_COLOR_DICT,
+            "Width": WIDTH_DICT,
+            "Dash": DASH_DICT,
+            "Outline" : OUTLINE_DICT
+        }
         self.rankings = rankings(ranking_path, ratings_paths)
         self.reviews = review(reviews_path)
         self.props: proposal() = None   # Not Implemented Yet.
@@ -75,11 +91,8 @@ class GUI:
         self.overall_rankings = self.rankings.get_all_rankings()
         self.canvas = tk.Canvas(self.root, width=800, height=700, bg="white", yscrollcommand=self.scrlbar2.set, xscrollcommand=self.scrlbar.set,
                         confine=False, scrollregion=(0,0,1000,600))
-        #button1 = Button(self.root, text="Switch To Left")
-        #button1.place(x=25, y=100)
 
         self.intial_canvas()
-        #self.init_buttons()
         self.init_number()
 
         self.scrlbar2.config(command=self.canvas.yview)
@@ -90,6 +103,7 @@ class GUI:
         self.set_up()
 
     def init_number(self):
+        self.canvas.create_text(20, 12, text="Merit", font=("Arial", 12))
         for i in range(1, 6):
             y0 = self.lines_pos[i-1][1]
             y1 = self.lines_pos[i-1][1]+40
@@ -108,8 +122,10 @@ class GUI:
             for j in range(len(rates)):
                 rate = rates[j]
                 for k in range(len(op_dict[keys[i]][rates[j]])):
-                    x_coord_rat = self.rankings.get_sub_rating(self.rat_to_attr["x_coord"], keys[i], op_dict[keys[i]][rates[j]][k])
-                    delta_x = self.get_delta_x(x_coord_rat)
+                    # For dx graphical attributes
+                    #x_coord_rat = self.rankings.get_sub_rating(self.rat_to_attr["X_coord"], keys[i], op_dict[keys[i]][rates[j]][k])
+                    #delta_x = self.get_delta_x(x_coord_rat)
+                    delta_x = 0
                     self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (50+i*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 50+(i+1)*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 
                                 2*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+k*(BOX_HEIGHT+BOX_DISTANCE_Y)+(5-rate)*BOX_DISTANCE_Y,
                                 3*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+k*(BOX_HEIGHT+BOX_DISTANCE_Y)+(5-rate)*BOX_DISTANCE_Y)
@@ -126,28 +142,33 @@ class GUI:
         return X_COOR_DICT[rating]
 
     def get_dash(self, reviewer, prop):
-        rating = self.rankings.get_sub_rating(self.rat_to_attr["dash"], reviewer, prop)
+        rating = self.rankings.get_sub_rating(self.rat_to_attr["Dash"], reviewer, prop)
         return DASH_DICT[rating]
 
     def get_outline(self, reviewer, prop):
-        rating = self.rankings.get_sub_rating(self.rat_to_attr["outline"], reviewer, prop)
+        rating = self.rankings.get_sub_rating(self.rat_to_attr["Outline"], reviewer, prop)
         return OUTLINE_DICT[rating]
 
+    def get_width(self, reviewer, prop):
+        rating = self.rankings.get_sub_rating(self.rat_to_attr["Width"], reviewer, prop)
+        return WIDTH_DICT[rating]
+    
     def intial_canvas(self):
-        #reviewer_boxes = []
         self.get_all_pos()
         for i in range(len(self.columns)):
             box = Proposal_Box(self.canvas, reviewer=self.columns[i], pos=(i*BOX_WIDTH+50+i*BOX_DISTANCE_X, (i+1)*BOX_WIDTH+50+i*BOX_DISTANCE_X, 0, BOX_HEIGHT))
-            #reviewer_boxes.append(box)
         for pair in self.pos.keys():   
             color = self.get_box_color(pair[0], pair[1])
             dash = self.get_dash(pair[0], pair[1])
             outline = self.get_outline(pair[0], pair[1])
-            box = Proposal_Box(self.canvas, pair[0], self.pos[pair], pair[1], color, dash, outline)
+            width = self.get_width(pair[0], pair[1])
+            box = Proposal_Box(self.canvas, pair[0], self.pos[pair], pair[1], color, dash, outline, width)
         for line in self.lines_pos:
             self.canvas.create_line(line[0], line[1], line[2], line[3], width=1.5, fill="gray")
-        for ver_line in self.ver_lin_pos:
-            self.canvas.create_line(ver_line[0], ver_line[1], ver_line[2], ver_line[3], width=1, fill="skyblue3", dash=(1,2))
+        #for ver_line in self.ver_lin_pos:
+            #self.canvas.create_line(ver_line[0], ver_line[1], ver_line[2], ver_line[3], width=1, fill="skyblue3", dash=(1,2))
+
+
     def selectItem(self, event):
         x = self.canvas.canvasx(event.x)
         y = self.canvas.canvasy(event.y)
@@ -157,8 +178,10 @@ class GUI:
         if _type != "rectangle":
             item  = (item[0]-1, )
         tags = self.canvas.gettags(item)
-        prop = tags[1]
-        self.canvas.itemconfig(prop, fill='Slategray4')
+        if len(tags) >= 2 and tags[1] != "current":
+            prop = tags[1]
+
+            self.canvas.itemconfig(prop, fill='Slategray4')
 
     def swap_left(self, event):
         x = self.canvas.canvasx(event.x)
@@ -186,7 +209,7 @@ class GUI:
         """
         returns the color of a given proposal box based on its FQ ranking.
         """
-        return BOX_COLOR_DICT[self.rankings.get_sub_rating(self.rat_to_attr["box_bgc"],reviewer, proposal)]
+        return BOX_COLOR_DICT[self.rankings.get_sub_rating(self.rat_to_attr["Box_Background_Color"],reviewer, proposal)]
         
 
     def get_pos(self, reviewer, proposal):
@@ -209,13 +232,16 @@ class GUI:
         tags = self.canvas.gettags(item)
         reviewer = tags[0]
         prop = tags[1]
-        print(reviewer)
-        print(prop)
+
         self.popup = Menu(self.root, tearoff=0)
         
+        self.popup.add_command(label="Legends", command=lambda: self.legend_sub())
+        
+        self.popup.add_separator()
         self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
         self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
         self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
+
 
         self.popup.add_separator()
         self.popup.add_command(label="Exit", command=lambda: self.closeWindow())
@@ -223,6 +249,118 @@ class GUI:
             self.popup.tk_popup(event.x_root, event.y_root)
         finally:
             self.popup.grab_release()
+
+    def legend_sub(self):
+        win2 = Toplevel()
+        win2.title('Legends')
+        win2.geometry('400x300')
+        w = 400
+        h = 300
+        x1 = 100
+        x2 = 300
+        dy = 30
+        ini_y = 50
+        sub_canvas = tk.Canvas(win2, width=w, height=h, bg="white")
+        keys = list(self.rat_to_attr.keys())
+        sub_canvas.create_text(x1, ini_y, text="Graphical Attributes", font=("bold", 13))
+        sub_canvas.create_text(x2, ini_y, text="Ratings", font=("bold", 13))
+        for i in range(len(keys)):
+            sub_canvas.create_text(x1, (i+1)*dy+ini_y, text=keys[i], tags=(f"{keys[i]}"))
+            sub_canvas.create_text(x2, (i+1)*dy+ini_y, text=self.rat_to_attr[keys[i]], tags=(f"{keys[i]}"))
+        sub_canvas.pack()
+
+
+        def legend_subsub(event):
+            x = sub_canvas.canvasx(event.x)
+            y = sub_canvas.canvasy(event.y)
+            item = sub_canvas.find_closest(x, y)
+            grap_attr = sub_canvas.gettags(item)[0]
+            if grap_attr == "Bands":
+                title = grap_attr
+                dic = {
+                    5: "Vertical Separate Bands Of 5",
+                    4: "Vertical Separate Bands Of 4",
+                    3: "Vertical Separate Bands Of 3",
+                    2: "Vertical Separate Bands Of 2",
+                    1: "Vertical Separate Bands Of 1",
+                }
+                win3 = Toplevel()
+                win3.title(title)
+                win3.geometry('400x300')
+                w = 400
+                h = 300
+                x1 = 50
+                x2 = 150
+                dy = 30
+                ini_y = 15
+                sub2_canvas = tk.Canvas(win3, width=w, height=h, bg="white")
+                for i in range(5, 0, -1):
+                    sub2_canvas.create_text(x1, (i+1)*dy+ini_y, text=i)
+                    sub2_canvas.create_text(x2, (i+1)*dy+ini_y, text=dic[i])
+                sub2_canvas.pack()
+            else:
+                title = grap_attr
+                dic = self.attr_to_dict[grap_attr]
+                win3 = Toplevel()
+                win3.title(title)
+                win3.geometry('400x300')
+                w = 400
+                h = 300
+                x1 = 50
+                x2 = 150
+                dy = 30
+                ini_y = 15
+                sub2_canvas = tk.Canvas(win3, width=w, height=h, bg="white")
+                fill = {
+                    5: None,
+                    4: None,
+                    3: None,
+                    2: None,
+                    1: None
+                }
+                dash =  {
+                    5: None,
+                    4: None,
+                    3: None,
+                    2: None,
+                    1: None
+                }
+                outline =  {
+                    5: None,
+                    4: None,
+                    3: None,
+                    2: None,
+                    1: None
+                }
+                width =  {
+                    5: None,
+                    4: None,
+                    3: None,
+                    2: None,
+                    1: None
+                }
+                if grap_attr == "Box_Background_Color":
+                    fill = dic
+                elif grap_attr == "Dash":
+                    dash = dic
+                elif grap_attr == "Outline":
+                    outline = dic
+                elif grap_attr == "Width":
+                    width = dic
+                for i in range(5, 0, -1):
+                    sub2_canvas.create_text(x1, (i+1)*dy+ini_y, text=i)
+                    sub2_canvas.create_rectangle(x2, (i+1)*dy+ini_y, x2+0.4*BOX_WIDTH, (i+1)*dy+ini_y+BOX_HEIGHT, 
+                                                fill=fill[i], dash=dash[i], outline=outline[i], width=width[i])
+                    #sub2_canvas.create_text(x2, (i+1)*dy+ini_y, text=dic[i])
+                sub2_canvas.pack()
+        sub_canvas.bind('<Double-1>', legend_subsub) 
+
+
+
+
+
+
+
 
     def rating_detail(self, reviewer, prop):
         self.child_window_ratings("Rating Details", reviewer, prop)
@@ -285,10 +423,8 @@ class GUI:
 
 
     def set_up(self):
-        self.canvas.bind("<Button-2>", self.do_popup)
-        #self.tree.bind("<ButtonPress-1>", self.bDown)
+        self.canvas.bind("<Button-3>", self.do_popup)
         self.canvas.bind("<ButtonRelease-1>",self.ret_colors)
-        #self.tree.bind("<Motion>", self.bMotion)
         self.canvas.bind('<Double-1>', self.swap_left) 
         self.canvas.bind('<ButtonPress-1>', self.selectItem)
         self.canvas.pack()
@@ -302,11 +438,12 @@ class GUI:
         if _type != "rectangle":
             item  = (item[0]-1, )
         tags = self.canvas.gettags(item)
-        prop = tags[1]
-        all_items = self.canvas.find_withtag(prop)
-        for item in all_items:
-            reviewer = self.canvas.gettags(item)[0]
-            self.canvas.itemconfig(item, fill=self.get_box_color(reviewer, prop))
+        if len(tags) >= 2 and tags[1] != "current":
+            prop = tags[1]
+            all_items = self.canvas.find_withtag(prop)
+            for item in all_items:
+                reviewer = self.canvas.gettags(item)[0]
+                self.canvas.itemconfig(item, fill=self.get_box_color(reviewer, prop))
 
 
     def show(self):

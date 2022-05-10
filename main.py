@@ -20,11 +20,11 @@ RATING_PATHS = {
 }
 
 rating_to_attr = {
-    "bands": "Overall_Merit",
-    "box_bgc": "Investigator",
-    "x_coord": "Approach",
-    "dash": "Innovation",
-    "outline" : "Significance"
+    "Bands": "Overall_Merit",
+    "Box_Background_Color": "Investigator",
+    "Width": "Approach",
+    "Dash": "Innovation",
+    "Outline" : "Significance"
 }
 
 def main():
