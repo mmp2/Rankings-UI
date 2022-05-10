@@ -11,13 +11,14 @@ TO DO's
 
 Tasks
 ======
-* Displaying reviews on a canvas as boxes, with graphical attributes that depend on the reviews  *V1 ALMOST DONE*
-* Simple GUI  *V1 ALMOST DONE*
+* Displaying reviews on a canvas as boxes, with graphical attributes that depend on the reviews 
+* Simple GUI  
   -- right click on box, displays menu + info
   -- allows changing order of columns
   -- select a box--> highlight all boxes for the same proposal
-* data input scripts (reading review files, reviewer files, proposal info...)  *not highest priority*
-* menus for mapping properties to graph attributes, and legend  *LET'S DO THIS, MMP to give you some real proposal rubrics*
+* data input scripts (reading review files, reviewer files, proposal info...)  (demo version)
+* menus for mapping properties to graph attributes, and legend 
+* filtering e.g proposals with OM >= 3
 
 
 Associating rectangle properties to review and proposal attributes

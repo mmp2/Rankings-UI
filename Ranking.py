@@ -9,8 +9,6 @@ class rankings:
         self.ratings = {}
         for rate_name in other_paths.keys():
             self.ratings[rate_name] = pd.read_csv(other_paths[rate_name], header=0, index_col=0)
-        
-
         self.op = self.ratings[self.rating_names[0]]
 
     def get_all_sub_ratings(self):
