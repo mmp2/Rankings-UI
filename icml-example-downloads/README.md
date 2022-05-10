@@ -24,3 +24,7 @@ I have deleted some fields and did not fill them with dummy data (e.g. reviewer 
 ReviewsSnapshot.xls
 --------------------
 I saw no difference in this file from Reviews.xls.
+
+In ICML, a reviewer does not see all the papers. So each ranking is over a subset of papers.
+Also, a reviewer does not create a total order of the papers, because some papers are not comparable (e.g. different area). So, they can enter any number of comparisons, possibly none.
+If Reviewer enters =, means that the papers are comparable and same quality. 
