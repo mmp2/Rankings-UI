@@ -28,3 +28,23 @@ I saw no difference in this file from Reviews.xls.
 In ICML, a reviewer does not see all the papers. So each ranking is over a subset of papers.
 Also, a reviewer does not create a total order of the papers, because some papers are not comparable (e.g. different area). So, they can enter any number of comparisons, possibly none.
 If Reviewer enters =, means that the papers are comparable and same quality. 
+
+What reviewer questions Q1-15 to display
+-----------------------------------------
+* in the **UI**, these numerical values
+    * 3 significance
+    *  4 novelty
+    *   5 technical
+    *   6 experiments
+    *   7 clarity
+    *   8 reproducibility
+    *   11 confidence
+    *   **10 Overall is the Merit rating**
+
+* in **Review Details**
+    * 1 Summary
+    * 2 Details
+    * 9 Questions for Authors
+
+* also in Review details
+   * 13, 14, 15
