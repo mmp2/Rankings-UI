@@ -2,15 +2,12 @@ from Ranking import rankings
 from GUI import GUI
 from Review import review
 
-OP_RATINGS_PATH = "OP_new.csv"
-REVIEWS_PATH = "Reviews.csv"
-FQ_RATINGS_PATH = "FQ Ratings.csv"
-OVERALL_RANKINGS_PATH = "WXML dataset - OP Ranking.csv"
-OS_RATINGS_PATH = "OS Ratings.csv"
-ST_RATINGS_PATH = "ST Ratings.csv"
 
+RATINGS_PATH = "dummy_ICML.xls"
+RANKING = "ReviewerSubmissionComparisons.txt"
+REVIEW_PATH = None
 PROPOSAL_PATH = None
-
+'''
 RATING_PATHS = {
     "overall": OP_RATINGS_PATH,
     "Investigator": FQ_RATINGS_PATH,
@@ -18,13 +15,13 @@ RATING_PATHS = {
     "Innovation": OP_RATINGS_PATH,
     "Significance": FQ_RATINGS_PATH,
 }
-
+'''
 rating_to_attr = {
-    "Bands": "Overall_Merit",
-    "Box_Background_Color": "Investigator",
-    "Width": "Approach",
-    "Dash": "Innovation",
-    "Outline" : "Significance"
+    "Bands": "Overall Score",
+    "Box_Background_Color": "Relevance and Significance",
+    "Width": "Novelty",
+    "Dash": "Technical Quality",
+    "Outline" : "Experimental Evaluation"
 }
 
 def main():
@@ -32,7 +29,7 @@ def main():
     #example_review = Review(review=review_text)
     #ranking_path = input("Please Enter The Name of the Ranking File: ")
     #rankings = Ranking(ranking_path)
-    instance = GUI(OVERALL_RANKINGS_PATH, REVIEWS_PATH, RATING_PATHS, PROPOSAL_PATH, rating_to_attr)
+    instance = GUI(RANKING, RATINGS_PATH, REVIEW_PATH, PROPOSAL_PATH, rating_to_attr)
     #instance.createWindow()
     instance.show()
 

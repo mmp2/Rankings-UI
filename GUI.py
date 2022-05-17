@@ -5,6 +5,8 @@ import tkinter as tk
 import sys
 
 import numpy as np
+from pyparsing import infix_notation
+from pyrsistent import v
 from Proposal import proposal
 from Ranking import rankings
 from Review import review
@@ -60,7 +62,7 @@ DASH_DICT = {
 
 
 class GUI:
-    def __init__(self, ranking_path, reviews_path, ratings_paths, proposals_path, rating_to_attr) -> None:
+    def __init__(self, ranking_path, scores_path, reviews_path, proposals_path, rating_to_attr) -> None:
         self.rat_to_attr = rating_to_attr
         self.attr_to_dict = {
             "Bands": None,
@@ -69,8 +71,8 @@ class GUI:
             "Dash": DASH_DICT,
             "Outline" : OUTLINE_DICT
         }
-        self.rankings = rankings(ranking_path, ratings_paths)
-        self.reviews = review(reviews_path)
+        self.rankings = rankings(ranking_path, scores_path)
+        #self.reviews = review(reviews_path)
         self.props: proposal() = None   # Not Implemented Yet.
 
         self.root = Tk()
@@ -421,7 +423,7 @@ class GUI:
 
 
     def set_up(self):
-        self.canvas.bind("<Button-2>", self.do_popup)
+        self.canvas.bind("<Button-3>", self.do_popup)
         self.canvas.bind("<ButtonRelease-1>",self.ret_colors)
         self.canvas.bind('<Double-1>', self.swap_left) 
         self.canvas.bind('<ButtonPress-1>', self.selectItem)

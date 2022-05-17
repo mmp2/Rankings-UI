@@ -1,0 +1,25 @@
+Reviewer Email	Left	Operator	Right
+aminashabbeer@gmail.com	1	Comparable	2
+muecke.math@gmail.com	1	PreferredOver	2
+senna@uchicago.edu	1	Comparable	5
+
+aminashabbeer@gmail.com	2	PreferredOver	5
+dongyin@google.com	2	PreferredOver	4
+muecke.math@gmail.com	2	Comparable	5
+senna@uchicago.edu	2	PreferredOver	1
+
+aminashabbeer@gmail.com	3	PreferredOver	6
+dongyin@google.com	3	Comparable	2
+muecke.math@gmail.com	3	PreferredOver	6
+
+aminashabbeer@gmail.com	4	PreferredOver	3
+dongyin@google.com	4	PreferredOver	6
+muecke.math@gmail.com	4	PreferredOver	1
+
+
+aminashabbeer@gmail.com	5	PreferredOver	4
+senna@uchicago.edu	5	PreferredOver	3
+
+dongyin@google.com	6	PreferredOver	1
+muecke.math@gmail.com	6	PreferredOver	4
+senna@uchicago.edu	6	PreferredOver	2
