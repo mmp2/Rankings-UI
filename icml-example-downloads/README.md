@@ -14,6 +14,8 @@ PreferredTo means better
 
 I don't know what the X means in this file. Normally there should be paper id's, i.e. natural numbers.
 
+Note also that for ICML, all comparison information should be displayed, not just top-t. 
+
 Reviews.xls
 ------------
 Excel file with all reviews for the selected papers. Ordered by paper id. 
