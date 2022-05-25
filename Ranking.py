@@ -2,32 +2,19 @@ import pandas as pd
 import numpy as np
 
 
-class rankings:
-    def __init__(self, ranking_path, score_path):
+class Rankings:
+    def __init__(self, ranking_path, rating_df):
 
-        df = pd.read_excel(score_path, header=2)
 
-        self.scores = df[['Reviewer Email','Paper ID','Q10 (Please provide an "overall score" for this submission.  - Value)', 'Q3 ([Relevance and Significance] (Is the subject matter important? Does the problem it tries to address have broad interests to the ICML audience or has impact in a certain special area? Is the proposed technique important, and will this work influence fu.1',
-            "Q4 ([Novelty] (Is relation to prior work well-explained, does it present a new concept or idea, does it improve the existing methods, or extend the applications of existing practice?)   - Value)",
-            "Q5 ( [Technical quality] (Is the approach technically sound. The claims and conclusions are supported by flawless arguments. Proofs are correct, formulas are correct, there are no hidden assumptions.) - Value)",
-            'Q6 ([Experimental evaluation] (Are the experiments well designed, sufficient, clearly described? The experiments should demonstrate that the method works under the assumed conditions, probe a variety of aspects of the novel methods or ideas, not just the .1',
-            "Q7 ([Clarity] (Is the paper well-organized and clearly written, should there be additional explanations or illustrations?)  - Value)"]].copy()
-
-        self.scores.rename(columns={'Q10 (Please provide an "overall score" for this submission.  - Value)': "Overall Score", 
-                'Q3 ([Relevance and Significance] (Is the subject matter important? Does the problem it tries to address have broad interests to the ICML audience or has impact in a certain special area? Is the proposed technique important, and will this work influence fu.1': "Relevance and Significance",
-                "Q4 ([Novelty] (Is relation to prior work well-explained, does it present a new concept or idea, does it improve the existing methods, or extend the applications of existing practice?)   - Value)" : "Novelty",
-                "Q5 ( [Technical quality] (Is the approach technically sound. The claims and conclusions are supported by flawless arguments. Proofs are correct, formulas are correct, there are no hidden assumptions.) - Value)": "Technical Quality",
-                'Q6 ([Experimental evaluation] (Are the experiments well designed, sufficient, clearly described? The experiments should demonstrate that the method works under the assumed conditions, probe a variety of aspects of the novel methods or ideas, not just the .1': "Experimental Evaluation",
-                "Q7 ([Clarity] (Is the paper well-organized and clearly written, should there be additional explanations or illustrations?)  - Value)": "Clarity"}, inplace=True)
-
+        self.scores = rating_df
         self.ranking = self.rankings(ranking_path)
-        self.rating_names = self.scores.columns[2:]
+        self.rating_names = self.scores.columns[4:-1]
 
-        self.index = list(self.scores["Reviewer Email"].unique())
-        self.columns = list(self.scores["Paper ID"].unique())
+        self.index = list(self.scores["Reviewer Name"].unique())
+        self.columns = list(self.scores["Paper Short Name"].unique())
 
     def get_rating_df(self, rat_name):
-        df = pd.DataFrame(index=self.scores["Reviewer Email"].unique(), columns=self.scores["Paper ID"].unique())
+        df = pd.DataFrame(index=self.scores["Reviewer Name"].unique(), columns=self.scores["Paper Short Name"].unique())
         for index in self.index:
             for column in self.columns:
                 df.loc[index][column] = self.get_sub_rating(rat_name, index, column)
@@ -66,15 +53,15 @@ class rankings:
         return result
     
     def get_sub_rating(self, rat_name, reviewer, prop):
-        l = self.scores.loc[(self.scores["Reviewer Email"] == reviewer) & (self.scores["Paper ID"] == prop), rat_name].tolist()
+
+        l = self.scores.loc[(self.scores["Reviewer Name"] == reviewer) & (self.scores["Paper Short Name"] == prop), rat_name].tolist()
         if l:
             return l[0]
         else:
             return np.nan
-        #return self.ratings[rat_name].loc[reviewer, prop]
 
     def get_all_sub_ratings(self):
-        return self.rating_names
+        return list(self.rating_names)
 
     def get_columns(self):
         return list(self.index)
@@ -82,9 +69,14 @@ class rankings:
     def get_all_rankings(self):
         ret = []
         for key in self.ranking.keys():
-          ret.append(self.ranking[key])  
-        return ret
+            l = []
+            for id in self.ranking[key]:
+                l.append(self.get_prop_sname(int(id)))
+            ret.append(l)  
+        return tuple(ret)
 
+    def get_prop_sname(self, id):
+        return self.scores.loc[self.scores["Paper ID"] == id, "Paper Short Name"].iloc[0]
 
     def get_op_rankings(self):
         df_op = self.get_rating_df("Overall Score")

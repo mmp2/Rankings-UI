@@ -1,16 +1,21 @@
+import pandas as pd
 
-class proposal:
-    def __init__(self, name, reviewers, reviews) -> None:
-        """
-        reviewers: a list of reviewers
-        reviews: a list of reviews each of which is written by the corresponding reviewer 
-        with the same index as in the reviewers list.
-        name: the name of current proposal
-        """
-        self.reviewer = reviewers
-        self.name = name
-        self.short_name = None
-        self.review = reviews
+class Proposals:
+    def __init__(self, df) -> None:
+        self.df = df
 
-    def get_name(self):
-        return self.name
+    def get_short_name(self, title):
+        num_str = 15     # The number of strings in the short name of the title
+        return title[:num_str]
+    
+    def get_full_title(self, id):
+        return self.df.loc[self.df["Paper ID"] == id, "Paper Title"].iloc[0]
+    
+    def get_detail(self, short_name):
+        pass
+    
+    def get_time_created(self, id):
+        return self.df.loc[self.df["Paper ID"] == id, "Created"].iloc[0]
+    
+    def get_last_mod(self, id):
+        return self.df.loc[self.df["Paper ID"] == id, "Last Modified"].iloc[0]

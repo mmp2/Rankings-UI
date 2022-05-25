@@ -5,10 +5,12 @@ import tkinter as tk
 import sys
 
 import numpy as np
-from Proposal import proposal
-from Ranking import rankings
-from Review import review
+from Proposal import Proposals
+from Ranking import Rankings
+from Review import Reviews
+from Reviewer import Reviewers
 from Proposal_Box import Proposal_Box
+from pre_process import distr_df
 
 BOX_COLOR_DICT = {
     5 : "white",
@@ -69,13 +71,17 @@ class GUI:
             "Dash": DASH_DICT,
             "Outline" : OUTLINE_DICT
         }
-        self.rankings = rankings(ranking_path, scores_path)
-        #self.reviews = review(reviews_path)
-        self.props: proposal() = None   # Not Implemented Yet.
+        ratings, props, reviewers, reivews = distr_df(scores_path)
+        self.rankings = Rankings(ranking_path, ratings)
+        self.reviewers = Reviewers(reviewers)
+        self.reviews = Reviews(reivews)
+        self.props = Proposals(props)
 
         self.root = Tk()
         self.root.title('Rankings UI')
-        self.root.geometry('800x700')
+        screen_height = self.root.winfo_screenheight()
+        y = int(round((screen_height/2) - (700/2)))
+        self.root.geometry(f'800x700+100+{str(y)}')
         self.root['bg'] = '#AC99F2' # Background Color of the entire UI
 
         # Set Scroll Bar
@@ -96,7 +102,6 @@ class GUI:
         self.scrlbar2.config(command=self.canvas.yview)
         self.scrlbar.config(command=self.canvas.xview)
         self.canvas.pack()
-
 
         self.set_up()
 
@@ -160,7 +165,7 @@ class GUI:
             dash = self.get_dash(pair[0], pair[1])
             outline = self.get_outline(pair[0], pair[1])
             width = self.get_width(pair[0], pair[1])
-            box = Proposal_Box(self.canvas, pair[0], self.pos[pair], pair[1], color, dash, outline, width)
+            box = Proposal_Box(self.canvas, pair[0], self.pos[pair], self.props.get_short_name(pair[1]), color, dash, outline, width)
         for line in self.lines_pos:
             self.canvas.create_line(line[0], line[1], line[2], line[3], width=1.5, fill="gray")
         #for ver_line in self.ver_lin_pos:
@@ -184,23 +189,24 @@ class GUI:
     def swap_left(self, event):
         x = self.canvas.canvasx(event.x)
         y = self.canvas.canvasy(event.y)
-        item = self.canvas.find_closest(x, y, halo=2)
+        if y <= BOX_HEIGHT:
+            item = self.canvas.find_closest(x, y, halo=2)
 
-        _type = self.canvas.type(item)
-        if _type != "rectangle":
-            item  = (item[0]-1, )
-        tags = self.canvas.gettags(item)
-        cur_rev = tags[0]
-        index = self.columns.index(cur_rev)
-        if index != 0:  
-            left_rev = self.columns[index-1]
-            self.canvas.move(left_rev, BOX_WIDTH+BOX_DISTANCE_X, 0)
-            self.canvas.move(cur_rev+"text", -(BOX_WIDTH+BOX_DISTANCE_X), 0)
-            self.canvas.move(left_rev+"text", BOX_WIDTH+BOX_DISTANCE_X, 0)
-            self.canvas.move(cur_rev, -(BOX_WIDTH+BOX_DISTANCE_X), 0)
+            _type = self.canvas.type(item)
+            if _type != "rectangle":
+                item  = (item[0]-1, )
+            tags = self.canvas.gettags(item)
+            cur_rev = tags[0]
+            index = self.columns.index(cur_rev)
+            if index != 0:  
+                left_rev = self.columns[index-1]
+                self.canvas.move(left_rev, BOX_WIDTH+BOX_DISTANCE_X, 0)
+                self.canvas.move(cur_rev+"text", -(BOX_WIDTH+BOX_DISTANCE_X), 0)
+                self.canvas.move(left_rev+"text", BOX_WIDTH+BOX_DISTANCE_X, 0)
+                self.canvas.move(cur_rev, -(BOX_WIDTH+BOX_DISTANCE_X), 0)
 
-            self.columns[index] = left_rev
-            self.columns[index-1] = cur_rev
+                self.columns[index] = left_rev
+                self.columns[index-1] = cur_rev
 
 
     def get_box_color(self, reviewer, proposal):
@@ -233,9 +239,9 @@ class GUI:
 
         self.popup = Menu(self.root, tearoff=0)
         
-        self.popup.add_command(label="Legends", command=lambda: self.legend_sub())
+        #self.popup.add_command(label="Legends", command=lambda: self.legend_sub())
         
-        self.popup.add_separator()
+        #self.popup.add_separator()
         self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
         self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
         self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
@@ -251,7 +257,7 @@ class GUI:
     def legend_sub(self):
         win2 = Toplevel()
         win2.title('Legends')
-        win2.geometry('400x300')
+        win2.geometry('400x300+1000+250')
         w = 400
         h = 300
         x1 = 100
@@ -284,7 +290,7 @@ class GUI:
                 }
                 win3 = Toplevel()
                 win3.title(title)
-                win3.geometry('400x300')
+                win3.geometry('400x300+1400+250')
                 w = 400
                 h = 300
                 x1 = 50
@@ -354,12 +360,6 @@ class GUI:
         sub_canvas.bind('<Double-1>', legend_subsub) 
 
 
-
-
-
-
-
-
     def rating_detail(self, reviewer, prop):
         self.child_window_ratings("Rating Details", reviewer, prop)
 
@@ -392,12 +392,12 @@ class GUI:
         treeScroll = ttk.Scrollbar(win2)
         treeScroll.pack(side=RIGHT, fill=Y)
         col_names = self.rankings.get_all_sub_ratings()
-        tree = ttk.Treeview(win2,columns=col_names, show="headings", yscrollcommand = treeScroll)
+        print(col_names)
+        tree = ttk.Treeview(win2, columns=col_names, show="headings", yscrollcommand = treeScroll)
         rating = []
         for rate_name in col_names:
             rating.append(self.rankings.get_sub_rating(rate_name, reviewer, proposal))
-        for col in col_names:
-            tree.heading(col, text=col)
+            tree.heading(rate_name, text=rate_name)
         tree.insert('', 'end', iid='line1', values=tuple(rating))
         tree.pack(side=LEFT, fill=BOTH)
         treeScroll.config(command=tree.yview)
@@ -445,4 +445,5 @@ class GUI:
 
 
     def show(self):
+        self.legend_sub()
         self.root.mainloop()

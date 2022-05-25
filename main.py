@@ -1,7 +1,5 @@
-from Ranking import rankings
 from GUI import GUI
-from Review import review
-
+from start_window import start_window
 
 RATINGS_PATH = "dummy_ICML.xls"
 RANKING = "ReviewerSubmissionComparisons.txt"
@@ -23,6 +21,11 @@ rating_to_attr = {
     "Dash": "Technical Quality",
     "Outline" : "Experimental Evaluation"
 }
+
+
+graph_attr = ["Bands", "Box_Background_Color", "Width", "Dash", "Outline"]
+ratings = ["Overall Score", "Relevance and Significance", "Novelty", "Technical Quality", "Experimental Evaluation"]
+rating_to_attr = start_window(graph_attr, ratings).start()
 
 def main():
     #review_text = "This proposal is awesome."

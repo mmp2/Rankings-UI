@@ -1,16 +1,11 @@
-class Reviewers:
-    def __init__(self, name, proposals, reviews, rankings) -> None:
-        """
-        name: the name of current reviewer
-        proposals: a list of proposals
-        reviews: a list of reviews each of which is written for the corresponding proposal
-        with the same index as in the proposals list.
-        rankings: a list of strings of proposals in the ascending order of the rankings.
-        """
-        self.name = name
-        self.proposals = proposals
-        self.reviews = reviews
-        self.rankings = rankings
+import pandas as pd
 
-    def get_reviews(self):
-        return self.reviews
+class Reviewers:
+    def __init__(self, df) -> None:
+        self.df = df
+
+    def get_name(self, email):
+        return self.df.loc[self.df["Reviewer Email"] == email, "Reviewer Name"].iloc[0]
+    
+    def get_number(self, email):
+        return self.df.loc[self.df["Reviewer Email"] == email, "Reviewer Number"].iloc[0]
