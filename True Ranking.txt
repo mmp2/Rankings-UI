@@ -1,0 +1,18 @@
+Rankings:
+
+Amina Shabbeer: Paper1(The Heavy-Tail)=Paper2>Paper5>Paper4>Paper3>Paper6
+Dong Yin: Paper3=Paper2>Paper4>Paper6>Paper1
+Nicole Muecke: Paper3>Paper6>Paper4>Paper1>Paper2=Paper5
+Sen Na: Paper6>Paper2>Paper1=Paper5>Paper3
+
+
+Overall Scores:
+
+Amina Shabbeer: 5, 5, 4, 3, 2, 1
+Dong Yin: 4, 4, 3, 2, 1
+Nicole Muecke: 5, 4, 3, 2, 1, 1
+Sen Na: 5, 4, 3, 3, 2
+
+
+p.s. The overall scores are in the same order as rankings.
+
