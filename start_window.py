@@ -17,7 +17,8 @@ class change_window:
         # Create submit button
         self.dict = dict
         self.graph_attr = list(dict.keys())
-        self.ratings = list(dict.values())
+        self.ratings = list(dict.values()) + ["None"]
+        self.ratings.remove("Overall Score")
         self.var_list = []
         
         for i in range(len(self.graph_attr)):
@@ -63,7 +64,8 @@ class change_window:
 
     def return_pairs(self):
         self.result = {}
-        if len(set(i.get() for i in self.var_list)) == len(self.var_list):
+        pairs = list(i.get() for i in self.var_list if i.get() != "None")
+        if len(set(pairs)) == len(pairs):
             for i in range(len(self.var_list)):
                 self.result[self.graph_attr[i]] = self.var_list[i].get()
             self.gui.update_all_rects(self.result)
@@ -75,15 +77,3 @@ class change_window:
 
     def get_pair(self):
         return self.result
-
-'''
-rating_to_attr = {
-    "Bands": "Overall Score",
-    "Box_Background_Color": "Relevance and Significance",
-    "Width": "Novelty",
-    "Dash": "Technical Quality",
-    "Outline" : "Experimental Evaluation"
-}
-win = change_window(rating_to_attr)
-win.show()
-'''
