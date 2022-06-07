@@ -5,7 +5,6 @@ import numpy as np
 class Rankings:
     def __init__(self, ranking_path, rating_df):
 
-
         self.scores = rating_df
         self.ranking = self.rankings(ranking_path)
         self.rating_names = self.scores.columns[4:-1]
@@ -28,30 +27,34 @@ class Rankings:
             while i != len(lines):
                 if lines[i] != "":
                     parts = lines[i].split("\t")
-                    if parts[0] not in result:
-                        result[parts[0]] = []
+                    if self.get_name(parts[0]) not in result:
+                        result[self.get_name(parts[0])] = []
                     left = parts[1]
                     right = parts[3]
-                    if left in result[parts[0]] and right not in result[parts[0]]:
-                        index = result[parts[0]].index(left)
+                    if left in result[self.get_name(parts[0])] and right not in result[self.get_name(parts[0])]:
+                        index = result[self.get_name(parts[0])].index(left)
                         if parts[2] == "Comparable":
-                            result[parts[0]].insert(index, right)
+                            result[self.get_name(parts[0])].insert(index, right)
                         else:
-                            result[parts[0]].insert(index+1, right)
-                    elif right in result[parts[0]] and left not in result[parts[0]]:
-                        index = result[parts[0]].index(right)
+                            result[self.get_name(parts[0])].insert(index+1, right)
+                    elif right in result[self.get_name(parts[0])] and left not in result[self.get_name(parts[0])]:
+                        index = result[self.get_name(parts[0])].index(right)
                         if parts[2] == "Comparable":
-                            result[parts[0]].insert(index, left)
+                            result[self.get_name(parts[0])].insert(index, left)
                         else:
-                            result[parts[0]].insert(index, left)
-                    elif (len(result[parts[0]]) != 0) and (right not in result[parts[0]]) and (left not in result[parts[0]]):
+                            result[self.get_name(parts[0])].insert(index, left)
+                    elif (len(result[self.get_name(parts[0])]) != 0) and (right not in result[self.get_name(parts[0])]) and (left not in result[self.get_name(parts[0])]):
                         lines.append(lines[i])
                     else:
-                        result[parts[0]].append(left)
-                        result[parts[0]].append(right)
+                        result[self.get_name(parts[0])].append(left)
+                        result[self.get_name(parts[0])].append(right)
                 i += 1
         return result
-    
+
+    def get_name(self, email):
+
+        return self.scores.loc[self.scores["Reviewer Email"] == email, "Reviewer Name"].iloc[0]
+
     def get_sub_rating(self, rat_name, reviewer, prop):
 
         l = self.scores.loc[(self.scores["Reviewer Name"] == reviewer) & (self.scores["Paper Short Name"] == prop), rat_name].tolist()
@@ -66,20 +69,28 @@ class Rankings:
     def get_columns(self):
         return list(self.index)
 
-    def get_all_rankings(self):
+    def get_all_rankings(self, topk=None):
         ret = []
-        for key in self.ranking.keys():
+        for key in self.index:
             l = []
-            for id in self.ranking[key]:
+            ids = self.ranking[key]
+            if topk is not None:
+                ids = ids[:topk]
+            for id in ids:
                 l.append(self.get_prop_sname(int(id)))
             ret.append(l)  
-        return tuple(ret)
+        return ret
 
     def get_prop_sname(self, id):
         return self.scores.loc[self.scores["Paper ID"] == id, "Paper Short Name"].iloc[0]
 
-    def get_op_rankings(self):
+    def get_op_rankings(self, topk=None):
+        list_rank = self.get_all_rankings(topk=topk)
         df_op = self.get_rating_df("Overall Score")
+        for i in range(len(list_rank)):
+            for paper in list(df_op.columns):
+                if paper not in list_rank[i]:
+                    df_op.at[list(df_op.index)[i], paper] = np.nan
         ret = {}
         rows = list(self.index)
         props = list(self.columns)
@@ -97,12 +108,3 @@ class Rankings:
                             maxi = len(ret[reviewer][rate])
         return ret, maxi
 
-
-''''
-RATINGS_PATH = "dummy_ICML.xls"
-RANKING = "ReviewerSubmissionComparisons.txt"
-
-instance = rankings(RANKING, RATINGS_PATH)
-#print(instance.get_op_rankings())
-print(instance.rankings)
-'''

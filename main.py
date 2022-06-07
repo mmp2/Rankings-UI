@@ -1,5 +1,5 @@
 from GUI import GUI
-from start_window import start_window
+from start_window import change_window
 
 RATINGS_PATH = "dummy_ICML.xls"
 RANKING = "ReviewerSubmissionComparisons.txt"
@@ -25,14 +25,14 @@ rating_to_attr = {
 
 graph_attr = ["Bands", "Box_Background_Color", "Width", "Dash", "Outline"]
 ratings = ["Overall Score", "Relevance and Significance", "Novelty", "Technical Quality", "Experimental Evaluation"]
-rating_to_attr = start_window(graph_attr, ratings).start()
+#rating_to_attr = change_window(graph_attr, ratings).start()
 
 def main():
     #review_text = "This proposal is awesome."
     #example_review = Review(review=review_text)
     #ranking_path = input("Please Enter The Name of the Ranking File: ")
     #rankings = Ranking(ranking_path)
-    instance = GUI(RANKING, RATINGS_PATH, REVIEW_PATH, PROPOSAL_PATH, rating_to_attr)
+    instance = GUI(RANKING, RATINGS_PATH, REVIEW_PATH, PROPOSAL_PATH, rating_to_attr, topk=3)
     #instance.createWindow()
     instance.show()
 
