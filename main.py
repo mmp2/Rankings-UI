@@ -1,5 +1,5 @@
 from GUI import GUI
-from start_window import change_window
+#from start_window import change_window
 
 RATINGS_PATH = "dummy_ICML.xls"
 RANKING = "ReviewerSubmissionComparisons.txt"

@@ -4,7 +4,6 @@ from tkinter import ttk
 import tkinter as tk
 from tkinter import messagebox
 import sys
-from unittest.mock import DEFAULT
 
 import numpy as np
 from Proposal import Proposals
@@ -13,7 +12,8 @@ from Review import Reviews
 from Reviewer import Reviewers
 from Proposal_Box import Proposal_Box
 from pre_process import distr_df
-from start_window import change_window
+from start_window import legend_window
+from filter import filter_window
 
 DEFAULT_GRAP_ATTR = {
     "color": "wheat1",
@@ -103,18 +103,38 @@ class GUI:
         self.scrlbar.pack(side="bottom", fill="x")
 
         self.columns = self.rankings.get_columns()
-        self.overall_rankings = self.rankings.get_all_rankings(topk=self.TOPK)
+        self.overall_rankings = self.rankings.get_all_rankings()
         self.canvas = tk.Canvas(self.root, width=800, height=700, bg="white", yscrollcommand=self.scrlbar2.set, xscrollcommand=self.scrlbar.set,
                         confine=False, scrollregion=(0,0,1000,600))
-                        
+        self.ties = self.rankings.ties
+        self.rate_range = range(0, 6)
+        self.filter_dict = {}
+        for rating in self.rankings.get_all_sub_ratings():
+            self.filter_dict[rating] = self.rate_range
         self.intial_canvas()
         self.init_number()
-
+        self.init_tied_rect()
         self.scrlbar2.config(command=self.canvas.yview)
         self.scrlbar.config(command=self.canvas.xview)
         self.canvas.pack()
 
         self.set_up()
+
+    def init_tied_rect(self):
+        for reviewer in self.ties.keys():
+            for tie in self.ties[reviewer]:
+                y0_f = np.inf
+                y1_f = -np.inf
+                x0_f = 0
+                x1_f = 0
+                for paper in tie:
+                    x0_f, x1_f, y0, y1 = self.pos[(reviewer, paper)]
+                    if y0 < y0_f:
+                        y0_f = y0
+                    if y1 > y1_f:
+                        y1_f = y1
+                self.canvas.create_rectangle(x0_f-BOX_DISTANCE_X*1/3, y0_f-BOX_DISTANCE_Y*1/3, x1_f+BOX_DISTANCE_X*1/3, y1_f+BOX_DISTANCE_Y*1/3)
+
 
     def init_number(self):
         self.canvas.create_text(20, 12, text="Merit", font=("Arial", 12))
@@ -128,7 +148,7 @@ class GUI:
             #l.config(yscrollcommand=self.scrlbar2.set)
 
     def get_all_pos(self):
-        op_dict, num_most = self.rankings.get_op_rankings(topk=self.TOPK)
+        op_dict, num_most = self.rankings.get_op_rankings()
         self.pos = {}
         keys = list(op_dict.keys())
         for i in range(len(keys)):
@@ -262,7 +282,8 @@ class GUI:
         
         #self.popup.add_command(label="Legends", command=lambda: self.legend_sub())
         
-        #self.popup.add_separator()
+        self.popup.add_command(label="Filter", command=lambda: self.filter_rect())
+        self.popup.add_separator()
         self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
         self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
         self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
@@ -392,11 +413,28 @@ class GUI:
             width = self.get_width(reviewer, prop)
             box.update_rect(color, dash, outline, width)
 
+    def filter_ratings(self, filter_dict, topk):
+        self.filter_dict = filter_dict
+        show_rects = self.rankings.updated_pairs(filter_dict, topk)
+        for box in self.prop_boxes:
+            reviewer, prop = box.get_reviewer_prop()
+            state = "hidden"
+            for i in range(len(show_rects)):
+                if show_rects[i][0] == reviewer and show_rects[i][1] == prop:
+                    state = "normal"
+                    break
+            box.update_rect(state=state)
+
     def change_attribute(self):
-        self.window = change_window(self.rat_to_attr, self)
+        self.window = legend_window(self.rat_to_attr, self)
         self.window.show()
         #self.rat_to_attr = self.window.get_pair()
         #self.update_all_rects()
+
+    def filter_rect(self):
+        #if self.filter_dict == N
+        self.filter = filter_window(self, self.filter_dict, self.rate_range, len(self.rankings.columns))
+        self.filter.show()
 
     def rating_detail(self, reviewer, prop):
         self.child_window_ratings("Rating Details", reviewer, prop)
@@ -421,7 +459,6 @@ class GUI:
         T.insert(tk.END, text)
 
 
-
     def child_window_ratings(self, name, reviewer, proposal):
         win2 = Toplevel()
         win2.title('Ratings Details')
@@ -429,7 +466,6 @@ class GUI:
         treeScroll = ttk.Scrollbar(win2)
         treeScroll.pack(side=RIGHT, fill=Y)
         col_names = self.rankings.get_all_sub_ratings()
-        print(col_names)
         tree = ttk.Treeview(win2, columns=col_names, show="headings", yscrollcommand = treeScroll)
         rating = []
         for rate_name in col_names:
@@ -438,7 +474,6 @@ class GUI:
         tree.insert('', 'end', iid='line1', values=tuple(rating))
         tree.pack(side=LEFT, fill=BOTH)
         treeScroll.config(command=tree.yview)
-
 
     def review_text(self, reviewer, proposal_name):
         text = self.reviews.get_review(reviewer, proposal_name)
@@ -455,7 +490,6 @@ class GUI:
         l.config(font =("Times", "24", "bold"))
         T.config(font =("Times", "16"))
         T.insert(tk.END, text)
-
 
     def set_up(self):
         self.canvas.bind("<Button-3>", self.do_popup)
@@ -484,75 +518,3 @@ class GUI:
     def show(self):
         self.legend_sub()
         self.root.mainloop()
-
-    class change_window:
-        def __init__(self, dict, gui):
-            self.gui = gui
-            self.root2 = Tk()
-            self.root2.title('Legend Window for Rankings UI')
-            self.root2.geometry('700x500+100+150')
-            
-            # Create the list of questions
-            # Pass them into an option menu
-            # Create an entry for the answer
-            # Create submit button
-            self.dict = dict
-            self.graph_attr = list(dict.keys())
-            self.ratings = list(dict.values())
-            self.var_list = []
-            
-            for i in range(len(self.graph_attr)):
-                tkvarq = StringVar(self.root2)
-                tkvarq.set("Please Select a Rating")
-                self.var_list.append(tkvarq)
-                self.create_wigets(self.graph_attr[i], i)
-
-            submit_button = Button(self.root2, text="Submit and Reopen the Main Window", command=self.return_pairs)
-            paddings = {'padx': 5, 'pady': 5}
-            submit_button.grid(column=1, row=len(self.graph_attr))
-            #Answer entry
-            #answer_entry = Entry(root, width=30)
-            #answer_entry.pack()
-
-        
-        def create_wigets(self, ga, order):
-            # padding for widgets using the grid layout
-            paddings = {'padx': 5, 'pady': 5}
-
-            # label
-            label = ttk.Label(self.root2, text=f'Please Select the Rating Displayed by the Graphical Attribute of {ga}:')
-            label.grid(column=0, row=order, sticky=tk.W, **paddings)
-            if order != 0:
-            # option menu
-                option_menu = ttk.OptionMenu(
-                    self.root2,
-                    self.var_list[order],
-                    self.dict[ga],
-                    *self.ratings)
-            else:
-                option_menu = ttk.OptionMenu(
-                    self.root2,
-                    self.var_list[order],
-                    self.dict[ga],
-                    *[self.dict[ga]])
-
-            option_menu.grid(column=1, row=order, sticky=tk.W, **paddings)
-
-            # output label
-            self.output_label = ttk.Label(self.root2, foreground='red')
-            self.output_label.grid(column=0, row=1, sticky=tk.W, **paddings)
-
-        def return_pairs(self):
-            self.result = {}
-            if len(set(i.get() for i in self.var_list)) == len(self.var_list):
-                for i in range(len(self.var_list)):
-                    self.result[self.graph_attr[i]] = self.var_list[i].get()
-                self.gui.update_all_rects(self.result)
-            else:
-                messagebox.showerror(title="Illegal Matching", message="Please Make Sure to Assign every Rating to Only One Graphical Attribute.")        
-        
-        def show(self):
-            self.root2.mainloop()
-
-        def get_pair(self):
-            return self.result
