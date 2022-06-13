@@ -61,6 +61,7 @@ class legend_window:
         for i in range(len(self.var_list)):
             self.result[self.graph_attr[i+1]] = self.var_list[i].get()
         self.gui.update_all_rects(self.result)
+        self.root2.destroy()
         #else:
             #messagebox.showerror(title="Illegal Matching", message="Please Make Sure to Assign every Rating to Only One Graphical Attribute.")        
     

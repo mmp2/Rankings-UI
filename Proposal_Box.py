@@ -36,6 +36,6 @@ class Proposal_Box:
         self.canvas.itemconfig(self.rect, fill=color, dash=dash, outline=outl, width=width, state=state)
         self.canvas.update()
     
-    def update_text(self, color=None, dash=None, outl=None, width=None, state=None):
-        self.canvas.itemconfig(self.rect, fill=color, dash=dash, outline=outl, width=width, state=state)
+    def update_text(self,  state=None):
+        self.canvas.itemconfig(self.text, state=state)
         self.canvas.update()

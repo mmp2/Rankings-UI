@@ -44,7 +44,7 @@ class filter_window:
         option_menu_topk = ttk.OptionMenu(
             self.root2,
             self.tkvarq_topk,
-            None,
+            str(num_papers),
             *range(1, self.num_papers+1))
         option_menu_topk.grid(column=1, row=len(self.ratings)+1, sticky=tk.W, **paddings)
         
@@ -102,6 +102,7 @@ class filter_window:
             self.result[self.ratings[i]] = [int(self.var_min[i].get()), int(self.var_max[i].get())]
         if valid:
             self.gui.filter_ratings(self.result, int(self.tkvarq_topk.get()))
+            self.root2.destroy()
 
         '''
         pairs = list(i.get() for i in self.var_list if i.get() != "None")
