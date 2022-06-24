@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 from tkinter import messagebox
-import sys
 
 class filter_window:
     def __init__(self, gui, attr, score_range, num_papers) -> None:
@@ -10,7 +9,6 @@ class filter_window:
         self.root2 = Tk()
         self.root2.title('Filter Window for Rankings UI')
         self.root2.geometry('500x400+100+150')
-        
         self.score_range = score_range
         self.num_papers = num_papers
         self.dict = attr

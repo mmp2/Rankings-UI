@@ -1,10 +1,13 @@
 from GUI import GUI
-#from start_window import change_window
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--rating_path", type=str, help="path of the rating file", required=True)
+parser.add_argument("--ranking_path", type=str, help="path of the ranking file", required=True)
+parser.add_argument("--num", "--num_str", type=int, help="number of string displayed in the papers' short name", default=15)
+args = parser.parse_args()
 RATINGS_PATH = "dummy_ICML.xls"
 RANKING = "ReviewerSubmissionComparisons.txt"
-REVIEW_PATH = None
-PROPOSAL_PATH = None
 '''
 RATING_PATHS = {
     "overall": OP_RATINGS_PATH,
@@ -12,8 +15,10 @@ RATING_PATHS = {
     "Approach": OP_RATINGS_PATH,
     "Innovation": OP_RATINGS_PATH,
     "Significance": FQ_RATINGS_PATH,
+
 }
 '''
+
 rating_to_attr = {
     "Bands": "Overall Score",
     "Box_Background_Color": "Relevance and Significance",
@@ -22,18 +27,8 @@ rating_to_attr = {
     "Outline" : "Experimental Evaluation"
 }
 
-
-graph_attr = ["Bands", "Box_Background_Color", "Width", "Dash", "Outline"]
-ratings = ["Overall Score", "Relevance and Significance", "Novelty", "Technical Quality", "Experimental Evaluation"]
-#rating_to_attr = change_window(graph_attr, ratings).start()
-
 def main():
-    #review_text = "This proposal is awesome."
-    #example_review = Review(review=review_text)
-    #ranking_path = input("Please Enter The Name of the Ranking File: ")
-    #rankings = Ranking(ranking_path)
-    instance = GUI(RANKING, RATINGS_PATH, REVIEW_PATH, PROPOSAL_PATH, rating_to_attr, topk=3)
-    #instance.createWindow()
+    instance = GUI(args.ranking_path, args.rating_path, rating_to_attr, args.num)
     instance.show()
 
 if __name__ == "__main__":

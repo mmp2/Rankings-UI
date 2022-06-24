@@ -12,6 +12,7 @@ class Proposals:
         return self.df.loc[self.df["Paper ID"] == id, "Paper Title"].iloc[0]
     
     def get_detail(self, short_name):
+        return "No Information Now."
         pass
     
     def get_time_created(self, id):

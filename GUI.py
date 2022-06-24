@@ -1,8 +1,6 @@
-  
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
-from tkinter import messagebox
 import sys
 
 import numpy as np
@@ -72,8 +70,7 @@ DASH_DICT = {
 
 
 class GUI:
-    def __init__(self, ranking_path, scores_path, reviews_path, proposals_path, rating_to_attr, topk) -> None:
-        self.TOPK = topk
+    def __init__(self, ranking_path, scores_path, rating_to_attr, num_str=15):
         self.rat_to_attr = rating_to_attr
         self.attr_to_dict = {
             "Bands": None,
@@ -82,7 +79,7 @@ class GUI:
             "Dash": DASH_DICT,
             "Outline" : OUTLINE_DICT
         }
-        ratings, props, reviewers, reivews = distr_df(scores_path)
+        ratings, props, reviewers, reivews = distr_df(scores_path, num_str)
         self.rankings = Rankings(ranking_path, ratings)
         self.reviewers = Reviewers(reviewers)
         self.reviews = Reviews(reivews)
@@ -94,7 +91,8 @@ class GUI:
         y = int(round((screen_height/2) - (700/2)))
         self.root.geometry(f'800x700+100+{str(y)}')
         self.root['bg'] = '#AC99F2' # Background Color of the entire UI
-
+        s = ttk.Style()
+        s.theme_use('clam')
         # Set Scroll Bar
         self.scrlbar2 = ttk.Scrollbar(self.root)
         self.scrlbar2.pack(side="right", fill="y")
@@ -285,7 +283,7 @@ class GUI:
         self.popup.add_command(label="Filter", command=lambda: self.filter_rect())
         self.popup.add_separator()
         self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
-        self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
+        #self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
         self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
 
 
@@ -297,7 +295,7 @@ class GUI:
             self.popup.grab_release()
 
     def legend_sub(self):
-        win2 = Toplevel()
+        win2 = Toplevel(self.root)
         win2.title('Legends')
         win2.geometry('400x300+1000+250')
         w = 400
@@ -332,7 +330,7 @@ class GUI:
                     2: "Vertical Separate Bands Of 2",
                     1: "Vertical Separate Bands Of 1",
                 }
-                win3 = Toplevel()
+                win3 = Toplevel(self.root)
                 win3.title(title)
                 win3.geometry('400x300+1400+250')
                 w = 400
@@ -349,7 +347,7 @@ class GUI:
             else:
                 title = grap_attr
                 dic = self.attr_to_dict[grap_attr]
-                win3 = Toplevel()
+                win3 = Toplevel(self.root)
                 win3.title(title)
                 win3.geometry('400x300')
                 w = 400
@@ -441,38 +439,45 @@ class GUI:
         self.child_window_ratings("Rating Details", reviewer, prop)
 
     def proposal_detail(self, prop):
-        if self.props is None:
-            text = "No Information Now."
-        else:
-            text = self.props.get_detail(prop)
+        text = self.props.get_detail(prop)
         self.child_window_prop(f"Details of {prop}", text)
 
     def child_window_prop(self, title, text):
-        win2 = Toplevel()
-        win2.title('Proposal Details')
-        T = Text(win2, height=20, width=52)
+        win3 = Toplevel(self.root)
+        win3.title('Proposal Details')
+        T = Text(win3, height=20, width=52)
+        T.insert("1.0", text)
         # Create label
-        l = Label(win2, text=title)
+        l = Label(win3, text=title)
         l.pack()
         T.pack()
         l.config(font =("Times", "24", "bold"))
         T.config(font =("Times", "16"))
-        T.insert(tk.END, text)
+
 
 
     def child_window_ratings(self, name, reviewer, proposal):
-        win2 = Toplevel()
+        win2 = Toplevel(self.root)
+        win2.geometry('1000x300')
         win2.title('Ratings Details')
         Label(win2, text=name).pack()
         treeScroll = ttk.Scrollbar(win2)
         treeScroll.pack(side=RIGHT, fill=Y)
         col_names = self.rankings.get_all_sub_ratings()
-        tree = ttk.Treeview(win2, columns=col_names, show="headings", yscrollcommand = treeScroll)
+    
+        s = ttk.Style()
+        s.theme_use('clam')
+
+        # Add the rowheight
+        s.configure('Treeview', rowheight=100)
+        tree = ttk.Treeview(win2, columns=col_names, selectmode="extended", show="headings", yscrollcommand = treeScroll)
         rating = []
+        reviews = self.reviews.get_reviews_in_order(reviewer, proposal, col_names)
         for rate_name in col_names:
             rating.append(self.rankings.get_sub_rating(rate_name, reviewer, proposal))
             tree.heading(rate_name, text=rate_name)
         tree.insert('', 'end', iid='line1', values=tuple(rating))
+        tree.insert('', 'end', iid='line2', values=tuple(reviews))
         tree.pack(side=LEFT, fill=BOTH)
         treeScroll.config(command=tree.yview)
 
@@ -481,7 +486,7 @@ class GUI:
         self.child_window_text(f"The Review of {proposal_name} by {reviewer}", text)
 
     def child_window_text(self, title, text):
-        win2 = Toplevel()
+        win2 = Toplevel(self.root)
         win2.title('Review Details')
         T = Text(win2, height=20, width=52)
         # Create label
@@ -493,7 +498,7 @@ class GUI:
         T.insert(tk.END, text)
 
     def set_up(self):
-        self.canvas.bind("<Button-2>", self.do_popup)
+        self.canvas.bind("<Button-3>", self.do_popup)
         self.canvas.bind("<ButtonRelease-1>",self.ret_colors)
         self.canvas.bind('<Double-1>', self.swap_left) 
         self.canvas.bind('<ButtonPress-1>', self.selectItem)

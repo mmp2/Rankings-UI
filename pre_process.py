@@ -1,22 +1,30 @@
 import pandas as pd
 
-def distr_df(path):
-    num_str = 15
+pd.options.display.max_colwidth = 200
 
-    df = pd.read_excel(path, header=2)
+def distr_df(path, num_str=15):
 
-    scores = df[['Reviewer Name', 'Reviewer Email','Paper Title', "Paper ID", 'Q10 (Please provide an "overall score" for this submission.  - Value)', 'Q3 ([Relevance and Significance] (Is the subject matter important? Does the problem it tries to address have broad interests to the ICML audience or has impact in a certain special area? Is the proposed technique important, and will this work influence fu.1',
-            "Q4 ([Novelty] (Is relation to prior work well-explained, does it present a new concept or idea, does it improve the existing methods, or extend the applications of existing practice?)   - Value)",
-            "Q5 ( [Technical quality] (Is the approach technically sound. The claims and conclusions are supported by flawless arguments. Proofs are correct, formulas are correct, there are no hidden assumptions.) - Value)",
-            'Q6 ([Experimental evaluation] (Are the experiments well designed, sufficient, clearly described? The experiments should demonstrate that the method works under the assumed conditions, probe a variety of aspects of the novel methods or ideas, not just the .1',
-            "Q7 ([Clarity] (Is the paper well-organized and clearly written, should there be additional explanations or illustrations?)  - Value)"]].copy()
+    column_name = ["Paper ID", "Paper Title", "Reviewer Name", "Reviewer Email", "Reviewer Number",
+                    "Created", "Last Modified", "Summary", "Detailed Comments", "Relevance and Significance", "Relevance and Significance-value",
+                    "Novelty", "Novelty-value", "Technical Quality", "Technical Quality-value", "Experimental Evaluation", "Experimental Evaluation-value",
+                    "Clarity", "Clarity-value", "Reproducibility", "Questions for Author", "Overall Score", "Overall Score-value",
+                    "Confidence", "Confidence-value", "Confidential comments to SPC, AC, and Program Chairs", "Anonymity", "Anonymity Details", "Handled Previously", "Please acknowledge that you have read the author rebuttal"]
+    df = pd.read_excel(path, skiprows=2, names=column_name)
 
-    scores.rename(columns={'Q10 (Please provide an "overall score" for this submission.  - Value)': "Overall Score", 
-                'Q3 ([Relevance and Significance] (Is the subject matter important? Does the problem it tries to address have broad interests to the ICML audience or has impact in a certain special area? Is the proposed technique important, and will this work influence fu.1': "Relevance and Significance",
-                "Q4 ([Novelty] (Is relation to prior work well-explained, does it present a new concept or idea, does it improve the existing methods, or extend the applications of existing practice?)   - Value)" : "Novelty",
-                "Q5 ( [Technical quality] (Is the approach technically sound. The claims and conclusions are supported by flawless arguments. Proofs are correct, formulas are correct, there are no hidden assumptions.) - Value)": "Technical Quality",
-                'Q6 ([Experimental evaluation] (Are the experiments well designed, sufficient, clearly described? The experiments should demonstrate that the method works under the assumed conditions, probe a variety of aspects of the novel methods or ideas, not just the .1': "Experimental Evaluation",
-                "Q7 ([Clarity] (Is the paper well-organized and clearly written, should there be additional explanations or illustrations?)  - Value)": "Clarity"}, inplace=True)
+    #scores = df[['Reviewer Name', 'Reviewer Email','Paper Title', "Paper ID", 'Q10 (Please provide an "overall score" for this submission.  - Value)', 'Q3 ([Relevance and Significance] (Is the subject matter important? Does the problem it tries to address have broad interests to the ICML audience or has impact in a certain special area? Is the proposed technique important, and will this work influence fu.1',
+            #"Q4 ([Novelty] (Is relation to prior work well-explained, does it present a new concept or idea, does it improve the existing methods, or extend the applications of existing practice?)   - Value)",
+            #"Q5 ( [Technical quality] (Is the approach technically sound. The claims and conclusions are supported by flawless arguments. Proofs are correct, formulas are correct, there are no hidden assumptions.) - Value)",
+            #'Q6 ([Experimental evaluation] (Are the experiments well designed, sufficient, clearly described? The experiments should demonstrate that the method works under the assumed conditions, probe a variety of aspects of the novel methods or ideas, not just the .1',
+            #"Q7 ([Clarity] (Is the paper well-organized and clearly written, should there be additional explanations or illustrations?)  - Value)"]].copy()
+    scores = df[['Reviewer Name', 'Reviewer Email','Paper Title', "Paper ID", "Overall Score-value", "Relevance and Significance-value", "Experimental Evaluation-value", "Novelty-value", "Technical Quality-value", "Clarity-value",
+                "Confidence-value"]].copy()
+    scores.rename(columns={"Overall Score-value": "Overall Score", 
+                "Relevance and Significance-value": "Relevance and Significance",
+                "Novelty-value": "Novelty",
+                "Technical Quality-value": "Technical Quality",
+                "Experimental Evaluation-value": "Experimental Evaluation",
+                "Clarity-value": "Clarity",
+                "Confidence-value": "Confidence"}, inplace=True)
 
     short_names = []
     for title in scores["Paper Title"].to_list():
@@ -26,14 +34,10 @@ def distr_df(path):
     props = df[['Reviewer Name', 'Reviewer Email','Paper Title', "Paper ID"]].copy()
     props["Paper Short Name"] = short_names
 
-
     reviewers = df[["Reviewer Name", "Reviewer Email", "Reviewer Number"]]
 
-
     reviews = df.copy()
-
-
-
+    reviews["Paper Short Name"] = short_names
     return scores, props, reviewers, reviews
 
 
