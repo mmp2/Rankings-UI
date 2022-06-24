@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import sys
+from tkinter.tix import Tree
 
 import numpy as np
 from Proposal import Proposals
@@ -253,13 +254,6 @@ class GUI:
         if self.rat_to_attr["Box_Background_Color"] == "None":
             return DEFAULT_GRAP_ATTR["color"]
         return BOX_COLOR_DICT[self.rankings.get_sub_rating(self.rat_to_attr["Box_Background_Color"],reviewer, proposal)]
-        
-
-    def get_pos(self, reviewer, proposal):
-        """
-        returns the color of a given proposal box based on its OP ranking.
-        """
-        pass
 
     def closeWindow(self):
         self.root.destroy()
@@ -283,7 +277,7 @@ class GUI:
         self.popup.add_command(label="Filter", command=lambda: self.filter_rect())
         self.popup.add_separator()
         self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
-        #self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
+        self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
         self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
 
 
@@ -461,16 +455,19 @@ class GUI:
         win2.geometry('1000x300')
         win2.title('Ratings Details')
         Label(win2, text=name).pack()
-        treeScroll = ttk.Scrollbar(win2)
-        treeScroll.pack(side=RIGHT, fill=Y)
+
         col_names = self.rankings.get_all_sub_ratings()
     
         s = ttk.Style()
         s.theme_use('clam')
 
         # Add the rowheight
+
         s.configure('Treeview', rowheight=100)
-        tree = ttk.Treeview(win2, columns=col_names, selectmode="extended", show="headings", yscrollcommand = treeScroll)
+        tree = ttk.Treeview(win2, columns=col_names, selectmode="extended", show="headings")
+        treeScroll = ttk.Scrollbar(win2, orient="horizontal", command=tree.xview)
+        treeScroll.pack(side=BOTTOM, fill=X)
+        tree.configure(xscrollcommand=treeScroll.set)
         rating = []
         reviews = self.reviews.get_reviews_in_order(reviewer, proposal, col_names)
         for rate_name in col_names:
@@ -479,23 +476,61 @@ class GUI:
         tree.insert('', 'end', iid='line1', values=tuple(rating))
         tree.insert('', 'end', iid='line2', values=tuple(reviews))
         tree.pack(side=LEFT, fill=BOTH)
-        treeScroll.config(command=tree.yview)
 
     def review_text(self, reviewer, proposal_name):
-        text = self.reviews.get_review(reviewer, proposal_name)
-        self.child_window_text(f"The Review of {proposal_name} by {reviewer}", text)
+        summary, details, quetsion, anonymity, anonymity_detail, handled_previously = self.reviews.get_all_review_sub(reviewer, proposal_name)
+        self.child_window_review(f"The Review of {proposal_name} by {reviewer}", summary, details, quetsion, anonymity, anonymity_detail, handled_previously)
 
-    def child_window_text(self, title, text):
+    def child_window_review(self, title, summary, details, quetsion, anonymity, anonymity_detail, handled_previously):
         win2 = Toplevel(self.root)
         win2.title('Review Details')
-        T = Text(win2, height=20, width=52)
+
+        canvas = tk.Canvas(win2, width=500, height=300)
+        container = ttk.Frame(canvas)
+        scroll = ttk.Scrollbar(win2, orient="vertical", command=canvas.yview)
+
+        T1 = Text(container, height=8, width=52, font =("Times", "12"))
+        T2 = Text(container, height=8, width=52, font =("Times", "12"))
+        T3 = Text(container, height=8, width=52, font =("Times", "12"))
+        T4 = Text(container, height=8, width=52, font =("Times", "12"))
+        T5 = Text(container, height=8, width=52, font =("Times", "12"))
+        T6 = Text(container, height=8, width=52, font =("Times", "12"))
         # Create label
-        l = Label(win2, text=title)
+        l = Label(container, text=title)
+        l1 = Label(container, text="Summary", font=("Times", "16", "bold"))
+        l2 = Label(container, text="Comment Details", font=("Times", "16", "bold"))
+        l3 = Label(container, text="Question For Authors", font=("Times", "16", "bold"))
+        l4 = Label(container, text="Anonymity", font=("Times", "16", "bold"))
+        l5 = Label(container, text="Anonymity Detail", font=("Times", "16", "bold"))
+        l6 = Label(container, text="Handled Previously", font=("Times", "16", "bold"))
+
         l.pack()
-        T.pack()
-        l.config(font =("Times", "24", "bold"))
-        T.config(font =("Times", "16"))
-        T.insert(tk.END, text)
+        l1.pack()
+        T1.pack()
+        l2.pack()
+        T2.pack()
+        l3.pack()
+        T3.pack()
+        l4.pack()
+        T4.pack()
+        l5.pack()
+        T5.pack()
+        l6.pack()
+        T6.pack()
+        l.config(font =("Times", "18", "bold"))
+        T1.insert(tk.END, summary)
+        T2.insert(tk.END, details)
+        T3.insert(tk.END, quetsion)
+        T4.insert(tk.END, anonymity)
+        T5.insert(tk.END, anonymity_detail)
+        T6.insert(tk.END, handled_previously)
+
+        canvas.create_window(0, 0, anchor=tk.CENTER, window=container)
+        canvas.update_idletasks()
+        canvas.configure(scrollregion=canvas.bbox('all'), 
+                        yscrollcommand=scroll.set)
+        canvas.pack(fill='both', expand=True, side='left')
+        scroll.pack(side=RIGHT, fill=Y, expand=True)
 
     def set_up(self):
         self.canvas.bind("<Button-3>", self.do_popup)

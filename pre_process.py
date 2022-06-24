@@ -1,6 +1,6 @@
 import pandas as pd
 
-pd.options.display.max_colwidth = 200
+pd.options.display.max_colwidth = 1000
 
 def distr_df(path, num_str=15):
 
