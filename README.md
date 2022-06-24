@@ -49,5 +49,10 @@ NOTE for Mac users. On my Mac book Pro, no combination works for "right clicking
 
 ## To run the GUI, simply type below in the terminal
 ```
+python main.py --rating_path xxx --ranking_path xxx --num xxx
+```
+
+For example:
+```
 python main.py --rating_path "dummy_ICML.xls" --ranking_path "ReviewerSubmissionComparisons.txt" --num 3
 ```
