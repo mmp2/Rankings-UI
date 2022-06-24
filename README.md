@@ -46,3 +46,8 @@ tkinter text attributes
 Notes to add in the user manual
 ================================
 NOTE for Mac users. On my Mac book Pro, no combination works for "right clicking" on a reviewed item. I connect a _classic mouse_ and use the _middle button_. **(Murray: It should be working now, and it works on my MacBook. I used the double finger to touch the touchpad. But the window user should click the scroll of the mouse.)** excellent --> keeping it for user manual
+
+## To run the GUI, simply type below in the terminal
+```
+python main.py --rating_path "dummy_ICML.xls" --ranking_path "ReviewerSubmissionComparisons.txt" --num 3
+```
