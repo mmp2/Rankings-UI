@@ -9,7 +9,7 @@ class Rankings:
         self.scores = rating_df
         self.ranking_path = ranking_path
         self.ranking, self.ties = self.rankings(ranking_path)
-        self.rating_names = self.scores.columns[4:-1]
+        self.rating_names = self.scores.columns[4:-2]
 
         self.index = list(self.scores["Reviewer Name"].unique())
         self.columns = list(self.scores["Paper Short Name"].unique())
@@ -97,11 +97,12 @@ class Rankings:
                 i += 1
         return result, tied
 
-    def updated_pairs(self,  dict, topk):
+    def updated_pairs(self,  dict, repo, topk):
         df = self.scores.copy()
         if dict is not None:
             for key in dict.keys():
                 df = df[(dict[key][0] <= df[key]) & (df[key] <= dict[key][1])]
+        df = df[df["Reproducibility"] == repo]
         df = df[["Reviewer Name", "Paper Short Name"]]
         dict_r = self.get_all_rankings(topk=topk)
         rank_list = [(i,x) for i in dict_r for x in dict_r[i]]
@@ -172,19 +173,3 @@ class Rankings:
                         if len(ret[reviewer][rate]) > maxi:
                             maxi = len(ret[reviewer][rate])
         return ret, maxi
-
-'''
-RATINGS_PATH = "dummy_ICML.xls"
-RANKING = "ReviewerSubmissionComparisons.txt"
-scores_path = RATINGS_PATH
-ranking_path = RANKING 
-ratings, props, reviewers, reivews = distr_df(scores_path)
-ins = Rankings(ranking_path, ratings)
-dict = {'Overall Score': [4, 5], 
-    'Relevance and Significance': [4, 5], 
-    'Novelty': [0, 4], 
-    'Technical Quality': [0, 5], 
-    'Experimental Evaluation': [0, 5]}
-
-ins.updated_pairs(dict)
-'''

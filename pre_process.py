@@ -17,7 +17,7 @@ def distr_df(path, num_str=15):
             #'Q6 ([Experimental evaluation] (Are the experiments well designed, sufficient, clearly described? The experiments should demonstrate that the method works under the assumed conditions, probe a variety of aspects of the novel methods or ideas, not just the .1',
             #"Q7 ([Clarity] (Is the paper well-organized and clearly written, should there be additional explanations or illustrations?)  - Value)"]].copy()
     scores = df[['Reviewer Name', 'Reviewer Email','Paper Title', "Paper ID", "Overall Score-value", "Relevance and Significance-value", "Experimental Evaluation-value", "Novelty-value", "Technical Quality-value", "Clarity-value",
-                "Confidence-value"]].copy()
+                "Confidence-value", "Reproducibility"]].copy()
     scores.rename(columns={"Overall Score-value": "Overall Score", 
                 "Relevance and Significance-value": "Relevance and Significance",
                 "Novelty-value": "Novelty",

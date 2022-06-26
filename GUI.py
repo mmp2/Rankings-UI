@@ -405,9 +405,9 @@ class GUI:
             width = self.get_width(reviewer, prop)
             box.update_rect(color, dash, outline, width)
 
-    def filter_ratings(self, filter_dict, topk):
+    def filter_ratings(self, filter_dict, repo, topk):
         self.filter_dict = filter_dict
-        show_rects = self.rankings.updated_pairs(filter_dict, topk)
+        show_rects = self.rankings.updated_pairs(filter_dict, repo, topk)
         for box in self.prop_boxes:
             reviewer, prop = box.get_reviewer_prop()
             state = "hidden"

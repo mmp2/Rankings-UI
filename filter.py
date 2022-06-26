@@ -15,6 +15,8 @@ class filter_window:
         self.ratings = list(attr.keys())
         self.var_min = []
         self.var_max = []
+        self.tkvarq_req = StringVar(self.root2)
+        self.tkvarq_req.set("Please")
         self.tkvarq_topk = StringVar(self.root2)
         self.tkvarq_topk.set("Please Select a Topk")
         for i in range(len(self.ratings)):
@@ -28,23 +30,29 @@ class filter_window:
 
         submit_button = Button(self.root2, text="Submit and Reopen the Main Window", command=self.return_pairs)
         paddings = {'padx': 2, 'pady': 5}
-        submit_button.grid(column=1, row=len(self.ratings)+2)
+        submit_button.grid(column=1, row=len(self.ratings)+3)
         label_min = ttk.Label(self.root2, text=f'Minimum Score')
         label_min.grid(column=1, row=0, sticky=tk.W, **paddings)
         label_max = ttk.Label(self.root2, text=f'Maximum Score')
         label_max.grid(column=2, row=0, sticky=tk.W, **paddings)
 
+        label_rep = ttk.Label(self.root2, text=f'Reproducibility:')
+        label_rep.grid(column=0, row=len(self.ratings)+1, sticky=tk.W, **paddings)
+        option_menu_req = ttk.OptionMenu(
+            self.root2,
+            self.tkvarq_req,
+            "Yes",
+            *["Yes", "No"])
+        option_menu_req.grid(column=1, row=len(self.ratings)+1, sticky=tk.W, **paddings)
+
         label_topk = ttk.Label(self.root2, text=f'Top-K Rankings:')
-        label_topk.grid(column=0, row=len(self.ratings)+1, sticky=tk.W, **paddings)
-        #label2 = ttk.Label(self.root2, text=f'Minimum Score of {ga}:')
-        #label2.grid(column=2, row=order, sticky=tk.W, **paddings)
-        # option menu
+        label_topk.grid(column=0, row=len(self.ratings)+2, sticky=tk.W, **paddings)
         option_menu_topk = ttk.OptionMenu(
             self.root2,
             self.tkvarq_topk,
             str(num_papers),
             *range(1, self.num_papers+1))
-        option_menu_topk.grid(column=1, row=len(self.ratings)+1, sticky=tk.W, **paddings)
+        option_menu_topk.grid(column=1, row=len(self.ratings)+2, sticky=tk.W, **paddings)
         
     def create_wigets(self, ga, order):
         # padding for widgets using the grid layout
@@ -53,9 +61,6 @@ class filter_window:
         # label
         label1 = ttk.Label(self.root2, text=f'{ga}:')
         label1.grid(column=0, row=order+1, sticky=tk.W, **paddings)
-        #label2 = ttk.Label(self.root2, text=f'Minimum Score of {ga}:')
-        #label2.grid(column=2, row=order, sticky=tk.W, **paddings)
-        # option menu
         option_menu_max = ttk.OptionMenu(
             self.root2,
             self.var_max[order],
@@ -66,20 +71,7 @@ class filter_window:
             self.var_min[order],
             str(min(self.dict[ga])),
             *self.score_range)
-        '''
-        else:
-            option_menu_max = ttk.OptionMenu(
-                self.root2,
-                self.var_max[order],
-                max(self.score_range),
-                *self.score_range)
 
-            option_menu_min = ttk.OptionMenu(
-                self.root2,
-                self.var_min[order],
-                min(self.score_range),
-                *self.score_range)
-        '''
         option_menu_max.grid(column=2, row=order+1, sticky=tk.W, **paddings)
         option_menu_min.grid(column=1, row=order+1, sticky=tk.W, **paddings)
         # output label
@@ -99,7 +91,7 @@ class filter_window:
                 break 
             self.result[self.ratings[i]] = [int(self.var_min[i].get()), int(self.var_max[i].get())]
         if valid:
-            self.gui.filter_ratings(self.result, int(self.tkvarq_topk.get()))
+            self.gui.filter_ratings(self.result, str(self.tkvarq_req.get()), int(self.tkvarq_topk.get()))
             self.root2.destroy()
 
         '''
