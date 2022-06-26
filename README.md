@@ -54,5 +54,5 @@ python main.py --rating_path xxx --ranking_path xxx --num xxx
 
 For example:
 ```
-python main.py --rating_path "dummy_ICML.xls" --ranking_path "ReviewerSubmissionComparisons.txt" --num 3
+python main.py --rating_path "dummy_ICML.xls" --ranking_path "ReviewerSubmissionComparisons.txt" --num 15
 ```
