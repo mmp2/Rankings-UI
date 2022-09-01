@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-
 from pre_process import distr_df
 
 
@@ -114,10 +113,9 @@ class Rankings:
         return self.scores.loc[self.scores["Reviewer Email"] == email, "Reviewer Name"].iloc[0]
 
     def get_sub_rating(self, rat_name, reviewer, prop):
-
         l = self.scores.loc[(self.scores["Reviewer Name"] == reviewer) & (self.scores["Paper Short Name"] == prop), rat_name].tolist()
         if l:
-            return l[0]
+            return str(l[0])
         else:
             return np.nan
 
@@ -165,7 +163,7 @@ class Rankings:
             ret[reviewer] = {}
             for prop in props:
                 rate = df_op.loc[reviewer, prop]
-                if not np.isnan(rate):
+                if not pd.isna(rate):
                     if rate not in ret[reviewer]:
                         ret[reviewer][rate] = [prop]
                     else:

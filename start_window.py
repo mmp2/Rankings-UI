@@ -1,8 +1,6 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
-from tkinter import messagebox
-import sys
 
 class legend_window:
     def __init__(self, dict, gui) -> None:
@@ -26,10 +24,6 @@ class legend_window:
         submit_button = Button(self.root2, text="Submit and Reopen the Main Window", command=self.return_pairs)
         paddings = {'padx': 5, 'pady': 5}
         submit_button.grid(column=1, row=len(self.graph_attr))
-        #Answer entry
-        #answer_entry = Entry(root, width=30)
-        #answer_entry.pack()
-
         
     def create_wigets(self, ga, order):
         # padding for widgets using the grid layout

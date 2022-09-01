@@ -1,4 +1,5 @@
 [default]
+name = 'Rankings UI'
 num_str = 15
 rat_min = 1
 rat_max = 6
@@ -10,7 +11,7 @@ outline = "black"
 width = 1
 dash = []
 
-[rating_to_graphic]
+[graphic_to_rating]
 Bands = "Overall Score"
 Box_Background_Color = "Relevance and Significance"
 Width = "Novelty"
@@ -23,29 +24,29 @@ box_height = 20
 box_distance_x = 50
 box_distance_y = 10
 
-[box_ratingsToAttributes]
-    [color]
+[box_graph_attributes]
+    [box_graph_attributes.color]
     5 = "white"
     4 = "wheat1"
     3 = "wheat2"
     2 = "wheat3"
     1 = "wheat4"
 
-    [outline]
+    [box_graph_attributes.outline]
     5 = "blue"
     4 = "red"
     3 = "purple"
     2 = "grey"
     1 = "black"
 
-    [width]
+    [box_graph_attributes.width]
     5 = 7
     4 = 5
     3 = 3
     2 = 1
     1 = 0
 
-    [dash]
+    [box_graph_attributes.dash]
     5 = []
     4 = [5]
     3 = [50, 50, 2]
