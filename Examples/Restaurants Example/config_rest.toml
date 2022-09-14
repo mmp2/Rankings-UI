@@ -1,0 +1,57 @@
+[default]
+name = 'Rankings UI'
+num_str = 15
+rat_min = 1
+rat_max = 6
+topk = 6
+
+[default_graphic_attributes]
+color = "wheat1"
+outline = "black"
+width = 1
+dash = []
+
+[graphic_to_rating]
+Bands = "FQ"
+Box_Background_Color = "MK"
+Width = "OS"
+Dash = "WS"
+Outline = "ST"
+
+[review]
+titles = ["Summary Word"]
+
+[box_size]
+box_width = 200
+box_height = 20
+box_distance_x = 50
+box_distance_y = 10
+
+[box_graph_attributes]
+    [box_graph_attributes.color]
+    5 = "white"
+    4 = "wheat1"
+    3 = "wheat2"
+    2 = "wheat3"
+    1 = "wheat4"
+
+    [box_graph_attributes.outline]
+    5 = "blue"
+    4 = "red"
+    3 = "purple"
+    2 = "grey"
+    1 = "black"
+
+    [box_graph_attributes.width]
+    5 = 7
+    4 = 5
+    3 = 3
+    2 = 1
+    1 = 0
+
+    [box_graph_attributes.dash]
+    5 = []
+    4 = [5]
+    3 = [50, 50, 2]
+    2 = [30,10, 2, 1]
+    1 = [255,255, 20, 255,255]
