@@ -10,11 +10,11 @@ reviewer enters as many comparisons as they want about the papers assigned to th
 comparisons must agree with overall score.
 
 Comparable means =
-PreferredTo means better
+paperA PreferredTo paperB means A better than B.
 
-I don't know what the X means in this file. Normally there should be paper id's, i.e. natural numbers.
+paperA, paperB are paper id's, i.e. natural numbers.
 
-Note also that for ICML, all comparison information should be displayed, not just top-t. 
+For ICML, all comparison information should be displayed, not just top-t. 
 
 Reviews.xls
 ------------
@@ -25,11 +25,10 @@ I have deleted some fields and did not fill them with dummy data (e.g. reviewer 
 
 ReviewsSnapshot.xls
 --------------------
-I saw no difference in this file from Reviews.xls.
+Currently, this file is identical to Reviews.xls.
 
-In ICML, a reviewer does not see all the papers. So each ranking is over a subset of papers.
-Also, a reviewer does not create a total order of the papers, because some papers are not comparable (e.g. different area). So, they can enter any number of comparisons, possibly none.
-If Reviewer enters =, means that the papers are comparable and same quality. 
+In ICML, a reviewer does not see all the papers. So, the conference chair can see all the reviews, but everyone else sees only a subset captured on ReviewsSnapshot. For our purposes, currently, both can be used as input files in the same way. Later, we may add a few more fields to Reviews.xls.
+ 
 
 What reviewer questions Q1-15 to display
 -----------------------------------------
