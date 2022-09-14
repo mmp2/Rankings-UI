@@ -1,15 +1,12 @@
 import pandas as pd
 import numpy as np
-from pre_process import distr_df
-
 
 class Rankings:
-    def __init__(self, ranking_path, rating_df):
+    def __init__(self, rating_df, ranking, ties):
         self.scores = rating_df
-        self.ranking_path = ranking_path
-        self.ranking, self.ties = self.rankings(ranking_path)
+        self.ranking = ranking
+        self.ties = ties
         self.rating_names = self.scores.columns[4:-2]
-
         self.index = list(self.scores["Reviewer Name"].unique())
         self.columns = list(self.scores["Paper Short Name"].unique())
         self.num_papers = len(self.columns)
@@ -20,81 +17,6 @@ class Rankings:
             for column in self.columns:
                 df.loc[index][column] = self.get_sub_rating(rat_name, index, column)
         return df
-
-    def rankings(self, path):
-        result = {}
-        tied = {}
-        with open(path, encoding="utf-8") as r:
-            lines = r.read().splitlines()
-            i = 1
-            while i != len(lines):
-                if lines[i] != "":
-                    parts = lines[i].split("\t")
-                    if self.get_name(parts[0]) not in result:
-                        result[self.get_name(parts[0])] = []
-                        tied[self.get_name(parts[0])] = []
-                    left = self.get_prop_sname(int(parts[1]))
-                    right = self.get_prop_sname(int(parts[3]))
-                    if left in result[self.get_name(parts[0])] and right not in result[self.get_name(parts[0])]:
-                        index = result[self.get_name(parts[0])].index(left)
-                        if parts[2] == "Comparable":
-                            result[self.get_name(parts[0])].insert(index, right)
-                            exist = False
-                            for i in range(len(tied[self.get_name(parts[0])])):
-                                if left in tied[self.get_name(parts[0])][i]:
-                                    tied[self.get_name(parts[0])][i].append(right)
-                                    exist = True
-                                    break
-                                elif right in tied[self.get_name(parts[0])][i]:
-                                    tied[self.get_name(parts[0])][i].append(left)
-                                    exist = True
-                                    break
-                            if not exist:
-                                tied[self.get_name(parts[0])].append([left, right])
-                            #elif right in set(x for x in tied[self.get_name(parts[0])]):
-                                #tied[self.get_name(parts[0])].append(left)
-                            #else:
-                                #tied[self.get_name(parts[0])].extend([left, right])
-                        else:
-                            result[self.get_name(parts[0])].insert(index+1, right)
-                    elif right in result[self.get_name(parts[0])] and left not in result[self.get_name(parts[0])]:
-                        index = result[self.get_name(parts[0])].index(right)
-                        if parts[2] == "Comparable":
-                            result[self.get_name(parts[0])].insert(index, left)
-                            exist = False
-                            for i in range(len(tied[self.get_name(parts[0])])):
-                                if left in tied[self.get_name(parts[0])][i]:
-                                    tied[self.get_name(parts[0])][i].append(right)
-                                    exist = True
-                                    break
-                                elif right in tied[self.get_name(parts[0])][i]:
-                                    tied[self.get_name(parts[0])][i].append(left)
-                                    exist = True
-                                    break
-                            if not exist:
-                                tied[self.get_name(parts[0])].append([left, right])
-                        else:
-                            result[self.get_name(parts[0])].insert(index, left)
-                    elif (len(result[self.get_name(parts[0])]) != 0) and (right not in result[self.get_name(parts[0])]) and (left not in result[self.get_name(parts[0])]):
-                        lines.append(lines[i])
-                    else:
-                        result[self.get_name(parts[0])].append(left)
-                        result[self.get_name(parts[0])].append(right)
-                        if parts[2] == "Comparable":
-                            exist = False
-                            for i in range(len(tied[self.get_name(parts[0])])):
-                                if left in tied[self.get_name(parts[0])][i]:
-                                    tied[self.get_name(parts[0])][i].append(right)
-                                    exist = True
-                                    break
-                                elif right in tied[self.get_name(parts[0])][i]:
-                                    tied[self.get_name(parts[0])][i].append(left)
-                                    exist = True
-                                    break
-                            if not exist:
-                                tied[self.get_name(parts[0])].append([left, right])
-                i += 1
-        return result, tied
 
     def updated_pairs(self,  dict, repo, topk):
         df = self.scores.copy()
@@ -125,6 +47,7 @@ class Rankings:
     def get_columns(self):
         return list(self.index)
 
+    '''
     def get_all_rankings(self, topk=None):
         ret = {}
         for key in self.index:
@@ -141,15 +64,9 @@ class Rankings:
                             break
             ret[key] = selected
         return ret
-
-    def get_prop_sname(self, id):
-        return self.scores.loc[self.scores["Paper ID"] == id, "Paper Short Name"].iloc[0]
-
-    def visible_rects(self):
-        pass
+    '''
 
     def get_op_rankings(self):
-        list_rank = self.get_all_rankings()
         df_op = self.get_rating_df("Overall Score")
         #for i in range(len(list_rank)):
             #for paper in list(df_op.columns):

@@ -74,9 +74,6 @@ class filter_window:
 
         option_menu_max.grid(column=2, row=order+1, sticky=tk.W, **paddings)
         option_menu_min.grid(column=1, row=order+1, sticky=tk.W, **paddings)
-        # output label
-        #self.output_label = ttk.Label(self.root2, foreground='red')
-        #self.output_label.grid(column=0, row=1, sticky=tk.W, **paddings)
 
 
     def return_pairs(self):
@@ -110,11 +107,4 @@ class filter_window:
     def get_pair(self):
         return self.result
 
-
-ratings = {"Overall Score": ['0', '5'],
-    "Relevance and Significance": ['0', '5'],
-    "Novelty": ['0', '5'],
-    "Technical Quality": ['0', '5'], 
-    "Experimental Evaluation": ['0', '5']}
-#inst = filter_window(ratings, range(6)).show()
 

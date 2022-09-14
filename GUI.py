@@ -3,18 +3,13 @@ from tkinter import ttk
 import tkinter as tk
 import sys
 import numpy as np
-from Proposal import Proposals
-from Ranking import Rankings
-from Review import Reviews
-from Reviewer import Reviewers
 from Proposal_Box import Proposal_Box
-from pre_process import distr_df
 from start_window import legend_window
 from filter import filter_window
 import toml
 
 configs = toml.load("config.toml")
-NAME = configs["name"]
+NAME = configs["default"]["name"]
 ATTR_TO_RAT = configs["graphic_to_rating"]
 LEN_SHORT_NAME = configs["default"]["num_str"]
 DEFAULT_GRAP_ATTR = configs["default_graphic_attributes"]
@@ -28,13 +23,13 @@ BOX_DISTANCE_X = configs["box_size"]["box_distance_x"]
 BOX_DISTANCE_Y = configs["box_size"]["box_distance_y"]
 
 class GUI:
-    def __init__(self, ranking_path, scores_path):
-        self.attr_to_rat = ATTR_TO_RAT
-        ratings, props, reviewers, reivews = distr_df(scores_path, LEN_SHORT_NAME)
-        self.rankings = Rankings(ranking_path, ratings)
-        self.reviewers = Reviewers(reviewers)
-        self.reviews = Reviews(reivews)
-        self.props = Proposals(props)
+    def __init__(self, rankings, reviewers, reviews, props, attr_to_rat=ATTR_TO_RAT):
+        self.attr_to_rat = attr_to_rat
+
+        self.rankings = rankings
+        self.reviewers = reviewers
+        self.reviews = reviews
+        self.props = props
 
         self.root = Tk()
         self.root.title(NAME)
@@ -52,7 +47,6 @@ class GUI:
         self.scrlbar.pack(side="bottom", fill="x")
 
         self.columns = self.rankings.get_columns()
-        self.overall_rankings = self.rankings.get_all_rankings()
         self.canvas = tk.Canvas(self.root, width=800, height=700, bg="white", yscrollcommand=self.scrlbar2.set, xscrollcommand=self.scrlbar.set,
                         confine=False, scrollregion=(0,0,1000,600))
         self.ties = self.rankings.ties
