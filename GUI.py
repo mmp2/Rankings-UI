@@ -8,7 +8,7 @@ from start_window import legend_window
 from filter import filter_window
 import toml
 
-configs = toml.load("config.toml")
+configs = toml.load("config_rest.toml")
 NAME = configs["default"]["name"]
 ATTR_TO_RAT = configs["graphic_to_rating"]
 LEN_SHORT_NAME = configs["default"]["num_str"]
@@ -21,6 +21,7 @@ BOX_WIDTH = configs["box_size"]["box_width"]
 BOX_HEIGHT = configs["box_size"]["box_height"]
 BOX_DISTANCE_X = configs["box_size"]["box_distance_x"]
 BOX_DISTANCE_Y = configs["box_size"]["box_distance_y"]
+LIST_REVIEW_TITLES = configs["review"]["titles"]
 
 class GUI:
     def __init__(self, rankings, reviewers, reviews, props, attr_to_rat=ATTR_TO_RAT):
@@ -63,20 +64,20 @@ class GUI:
         self.set_up()
 
     def init_tied_rect(self):
-        for reviewer in self.ties.keys():
-            for tie in self.ties[reviewer]:
-                y0_f = np.inf
-                y1_f = -np.inf
-                x0_f = 0
-                x1_f = 0
-                for paper in tie:
-                    x0_f, x1_f, y0, y1 = self.pos[(reviewer, paper)]
-                    if y0 < y0_f:
-                        y0_f = y0
-                    if y1 > y1_f:
-                        y1_f = y1
-                self.canvas.create_rectangle(x0_f-BOX_DISTANCE_X*1/3, y0_f-BOX_DISTANCE_Y*1/3, x1_f+BOX_DISTANCE_X*1/3, y1_f+BOX_DISTANCE_Y*1/3)
-
+        if self.ties is not None:
+            for reviewer in self.ties.keys():
+                for tie in self.ties[reviewer]:
+                    y0_f = np.inf
+                    y1_f = -np.inf
+                    x0_f = 0
+                    x1_f = 0
+                    for paper in tie:
+                        x0_f, x1_f, y0, y1 = self.pos[(reviewer, paper)]
+                        if y0 < y0_f:
+                            y0_f = y0
+                        if y1 > y1_f:
+                            y1_f = y1
+                    self.canvas.create_rectangle(x0_f-BOX_DISTANCE_X*1/3, y0_f-BOX_DISTANCE_Y*1/3, x1_f+BOX_DISTANCE_X*1/3, y1_f+BOX_DISTANCE_Y*1/3)
 
     def init_number(self):
         self.canvas.create_text(20, 12, text="Merit", font=("Arial", 12))
@@ -84,7 +85,6 @@ class GUI:
             y0 = self.lines_pos[i-1][1]
             y1 = self.lines_pos[i-1][1]+40
             self.canvas.create_text(15,(y0+y1)//2, text=str(6-i), font=("Arial", 25))
-
 
     def get_all_pos(self):
         op_dict, num_most = self.rankings.get_op_rankings()
@@ -136,24 +136,21 @@ class GUI:
             dash = self.get_dash(pair[0], pair[1])
             outline = self.get_outline(pair[0], pair[1])
             width = self.get_width(pair[0], pair[1])
-            box = Proposal_Box(self.canvas, pair[0], self.pos[pair], self.props.get_short_name(pair[1]), color, dash, outline, width)
+            box = Proposal_Box(self.canvas, pair[0], self.pos[pair], pair[1], color, dash, outline, width)
             self.prop_boxes.append(box)
         for line in self.lines_pos:
             self.canvas.create_line(line[0], line[1], line[2], line[3], width=1.5, fill="gray")
-
 
     def selectItem(self, event):
         x = self.canvas.canvasx(event.x)
         y = self.canvas.canvasy(event.y)
         item = self.canvas.find_closest(x, y)
-
         _type = self.canvas.type(item)
         if _type != "rectangle":
             item  = (item[0]-1, )
         tags = self.canvas.gettags(item)
         if len(tags) >= 2 and tags[1] != "current":
             prop = tags[1]
-
             self.canvas.itemconfig(prop, fill='Slategray4')
 
     def swap_left(self, event):
@@ -410,52 +407,26 @@ class GUI:
         tree.pack(side=LEFT, fill=BOTH)
 
     def review_text(self, reviewer, proposal_name):
-        summary, details, quetsion, anonymity, anonymity_detail, handled_previously = self.reviews.get_all_review_sub(reviewer, proposal_name)
-        self.child_window_review(f"The Review of {proposal_name} by {reviewer}", summary, details, quetsion, anonymity, anonymity_detail, handled_previously)
+        list_reviews = self.reviews.get_all_review_sub(reviewer, proposal_name)
+        self.child_window_review(f"The Review of {proposal_name} by {reviewer}", list_reviews, list_review_titles=LIST_REVIEW_TITLES)
 
-    def child_window_review(self, title, summary, details, quetsion, anonymity, anonymity_detail, handled_previously):
+    def child_window_review(self, title, list_reviews, list_review_titles):
         win2 = Toplevel(self.root)
         win2.title('Review Details')
 
         canvas = tk.Canvas(win2, width=500, height=300)
         container = ttk.Frame(canvas)
         scroll = ttk.Scrollbar(win2, orient="vertical", command=canvas.yview)
-
-        T1 = Text(container, height=8, width=52, font =("Times", "12"))
-        T2 = Text(container, height=8, width=52, font =("Times", "12"))
-        T3 = Text(container, height=8, width=52, font =("Times", "12"))
-        T4 = Text(container, height=8, width=52, font =("Times", "12"))
-        T5 = Text(container, height=8, width=52, font =("Times", "12"))
-        T6 = Text(container, height=8, width=52, font =("Times", "12"))
-        # Create label
+        
         l = Label(container, text=title)
-        l1 = Label(container, text="Summary", font=("Times", "16", "bold"))
-        l2 = Label(container, text="Comment Details", font=("Times", "16", "bold"))
-        l3 = Label(container, text="Question For Authors", font=("Times", "16", "bold"))
-        l4 = Label(container, text="Anonymity", font=("Times", "16", "bold"))
-        l5 = Label(container, text="Anonymity Detail", font=("Times", "16", "bold"))
-        l6 = Label(container, text="Handled Previously", font=("Times", "16", "bold"))
-
         l.pack()
-        l1.pack()
-        T1.pack()
-        l2.pack()
-        T2.pack()
-        l3.pack()
-        T3.pack()
-        l4.pack()
-        T4.pack()
-        l5.pack()
-        T5.pack()
-        l6.pack()
-        T6.pack()
         l.config(font =("Times", "18", "bold"))
-        T1.insert(tk.END, summary)
-        T2.insert(tk.END, details)
-        T3.insert(tk.END, quetsion)
-        T4.insert(tk.END, anonymity)
-        T5.insert(tk.END, anonymity_detail)
-        T6.insert(tk.END, handled_previously)
+        for i in range(len(list_reviews)):
+            T = Text(container, height=8, width=52, font =("Times", "12"))
+            L = Label(container, text=list_review_titles[i], font=("Times", "16", "bold"))
+            L.pack()
+            T.pack()
+            T.insert(tk.END, list_reviews[i])
 
         canvas.create_window(0, 0, anchor=tk.CENTER, window=container)
         canvas.update_idletasks()
