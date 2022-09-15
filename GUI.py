@@ -8,7 +8,7 @@ from start_window import legend_window
 from filter import filter_window
 import toml
 
-configs = toml.load("config_rest.toml")
+configs = toml.load("config.toml")
 NAME = configs["default"]["name"]
 ATTR_TO_RAT = configs["graphic_to_rating"]
 LEN_SHORT_NAME = configs["default"]["num_str"]
