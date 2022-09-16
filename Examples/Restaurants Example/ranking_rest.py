@@ -31,6 +31,10 @@ class Rankings:
         return list(set(rank_list).intersection(set(filter_list)))
 
     def get_sub_rating(self, rat_name, reviewer, prop):
+        """
+        Given a rating name, a reviewer name, and a proposal name, returns its score of rating.
+        Return NaN if there is no such a score.
+        """
         l = self.scores.loc[(self.scores["Reviewer Name"] == reviewer) & (self.scores["Proposal Name"] == prop), rat_name].tolist()
         if l:
             return str(l[0])
@@ -38,36 +42,25 @@ class Rankings:
             return np.nan
 
     def get_all_sub_ratings(self):
+        """
+        Returns a list of sub-rating (not including op) names
+        """
         return list(self.rating_names)
 
     def get_columns(self):
+        """
+        Returns a list of unique reviewer names.
+        """
         return list(self.index)
 
-    '''
-    def get_all_rankings(self, topk=None):
-        ret = {}
-        for key in self.index:
-            papers = self.ranking[key]
-            selected = papers
-            if topk is not None:
-                selected = papers[:topk]
-                for tie in self.ties[key]:
-                    for i in range(len(tie)):
-                        if selected[-1] == tie[i]:
-                            for other in tie:
-                                if other not in selected:
-                                    selected.append(other)
-                            break
-            ret[key] = selected
-        return ret
-    '''
-
     def get_op_rankings(self):
+        """
+        Return:
+        ret: A dictionary of dictionaries that the first key is reviewer and the second key is the op rating score and 
+            the value is a list of proposals.
+        maxi: The maximum number of proposals that has a same op rating score.
+        """
         df_op = self.get_rating_df("OP")
-        #for i in range(len(list_rank)):
-            #for paper in list(df_op.columns):
-                #if paper not in list_rank[i]:
-                    #df_op.at[list(df_op.index)[i], paper] = np.nan
         ret = {}
         rows = list(self.index)
         props = list(self.columns)
