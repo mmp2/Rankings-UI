@@ -1,4 +1,4 @@
-import GUI
+from rankings_UI import GUI
 from pre_process import distr_df, rankings
 from Proposal import Proposals
 from Ranking import Rankings
