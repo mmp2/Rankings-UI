@@ -12,6 +12,9 @@ class Rankings:
         self.num_papers = len(self.columns)
 
     def get_rating_df(self, rat_name):
+        """
+        Return a dataframe of a given kind of rating where the indices are reviewer names and the columns are proposal names.
+        """
         df = pd.DataFrame(index=self.scores["Reviewer Name"].unique(), columns=self.scores["Proposal Name"].unique())
         for index in self.index:
             for column in self.columns:
@@ -60,7 +63,8 @@ class Rankings:
             the value is a list of proposals.
         maxi: The maximum number of proposals that has a same op rating score.
         """
-        df_op = self.get_rating_df("OP")
+        df_op = self.
+        ("OP")
         ret = {}
         rows = list(self.index)
         props = list(self.columns)
