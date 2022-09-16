@@ -1,4 +1,4 @@
-from GUI import GUI
+from rankings_UI import GUI
 from pre_without_ties import distr_df, rankings
 from prop_rest import Proposals
 from ranking_rest import Rankings
