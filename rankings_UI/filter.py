@@ -4,14 +4,19 @@ import tkinter as tk
 from tkinter import messagebox
 
 class filter_window:
-    def __init__(self, gui, attr, score_range, num_papers) -> None:
+    def __init__(self, gui, attr, score_range, num_papers):
+        """
+        gui: The specific ranking GUI that is running.
+        attr: A dictionary of current relationship between graphical attribute and ratings.
+        score_range: A list range of scores of ratings.
+        num_papers: The number of proposals.
+        """
         self.gui = gui
         self.root2 = Tk()
         self.root2.title('Filter Window for Rankings UI')
         self.root2.geometry('500x400+100+150')
         self.score_range = score_range
         self.num_papers = num_papers
-        self.dict = attr
         self.ratings = list(attr.keys())
         self.var_min = []
         self.var_max = []
@@ -90,16 +95,6 @@ class filter_window:
         if valid:
             self.gui.filter_ratings(self.result, str(self.tkvarq_req.get()), int(self.tkvarq_topk.get()))
             self.root2.destroy()
-
-        '''
-        pairs = list(i.get() for i in self.var_list if i.get() != "None")
-        if len(set(pairs)) == len(pairs):
-            for i in range(len(self.var_list)):
-                self.result[self.graph_attr[i]] = self.var_list[i].get()
-            self.gui.update_all_rects(self.result)
-        else:
-            messagebox.showerror(title="Illegal Matching", message="Please Make Sure to Assign every Rating to Only One Graphical Attribute.")        
-        '''
     
     def show(self):
         self.root2.mainloop()
