@@ -25,6 +25,10 @@ LIST_REVIEW_TITLES = configs["review"]["titles"]
 
 class GUI:
     def __init__(self, rankings, reviewers, reviews, props, attr_to_rat=ATTR_TO_RAT):
+        """
+        rankings, reviewers, reviews, props: Similar classes that contains all specific functional methods as in examples.
+        attr_to_rat: A dictionary that contains the relationship between each graphical attribute to a rating.
+        """
         self.attr_to_rat = attr_to_rat
 
         self.rankings = rankings
