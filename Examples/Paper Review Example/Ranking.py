@@ -47,25 +47,6 @@ class Rankings:
     def get_columns(self):
         return list(self.index)
 
-    '''
-    def get_all_rankings(self, topk=None):
-        ret = {}
-        for key in self.index:
-            papers = self.ranking[key]
-            selected = papers
-            if topk is not None:
-                selected = papers[:topk]
-                for tie in self.ties[key]:
-                    for i in range(len(tie)):
-                        if selected[-1] == tie[i]:
-                            for other in tie:
-                                if other not in selected:
-                                    selected.append(other)
-                            break
-            ret[key] = selected
-        return ret
-    '''
-
     def get_op_rankings(self):
         df_op = self.get_rating_df("Overall Score")
         #for i in range(len(list_rank)):
