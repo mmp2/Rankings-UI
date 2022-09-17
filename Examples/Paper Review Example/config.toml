@@ -2,7 +2,7 @@
 name = 'Rankings UI'
 num_str = 15
 rat_min = 1
-rat_max = 6
+rat_max = 5
 topk = 6
 
 [default_graphic_attributes]
@@ -17,6 +17,9 @@ Box_Background_Color = "Relevance and Significance"
 Width = "Novelty"
 Dash = "Technical Quality"
 Outline = "Experimental Evaluation"
+
+[filter]
+yesno_list = ["Reproducibility"]
 
 [review]
 titles = ["Summary", "Detailed Comments", "Questions for Author", "Anonymity", "Anonymity Details","Handled Previously"]
