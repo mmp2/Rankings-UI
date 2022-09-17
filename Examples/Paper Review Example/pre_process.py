@@ -2,7 +2,7 @@ import pandas as pd
 
 pd.options.display.max_colwidth = 1000
 
-def distr_df(path, num_str=15):
+def process_into_dataframes(path, num_str=15):
     column_name = ["Paper ID", "Paper Title", "Reviewer Name", "Reviewer Email", "Reviewer Number",
                     "Created", "Last Modified", "Summary", "Detailed Comments", "Relevance and Significance", "Relevance and Significance-value",
                     "Novelty", "Novelty-value", "Technical Quality", "Technical Quality-value", "Experimental Evaluation", "Experimental Evaluation-value",
@@ -35,7 +35,7 @@ def get_prop_sname(id, scores):
 def get_name(email, scores):
     return scores.loc[scores["Reviewer Email"] == email, "Reviewer Name"].iloc[0]
 
-def rankings(path, scores):
+def get_rankings(path, scores):
     """
     returns a dictionary that indicates the true ranking for each reviewer
     and a dictionary that shows the ties that each reviewer gives.
@@ -108,6 +108,4 @@ def rankings(path, scores):
                         if not exist:
                             tied[get_name(parts[0], scores)].append([left, right])
             i += 1
-    print(result, tied)
     return result, tied
-    
