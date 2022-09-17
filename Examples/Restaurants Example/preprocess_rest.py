@@ -5,9 +5,9 @@ def distr_df(ranking_path, op_path, other_paths, review_path, num_str=15):
     df = pd.read_csv(ranking_path, header=0, index_col=0)
     rating_names = list(other_paths.keys())
     score = pd.DataFrame(columns=rating_names)
+    score["OP"] = 0
     score["Reviewer Name"] = 0
     score["Proposal Name"] = 0
-    score["OP"] = 0
     op = pd.read_csv(op_path, header=0, index_col=0)
     ratings = {}
     for rate_name in other_paths.keys():
@@ -19,9 +19,9 @@ def distr_df(ranking_path, op_path, other_paths, review_path, num_str=15):
                     "ST": ratings["ST"].loc[review_name][rest_name],
                     "WS": ratings["WS"].loc[review_name][rest_name],
                     "MK": ratings["MK"].loc[review_name][rest_name], 
+                    "OP": op.at[review_name, rest_name],
                     "Reviewer Name": review_name, 
-                    "Proposal Name": rest_name, 
-                    "OP": op.at[review_name, rest_name]}
+                    "Proposal Name": rest_name}
             score = score.append(dict, ignore_index = True)
     short_names = []
     for title in score["Proposal Name"].to_list():
@@ -29,8 +29,17 @@ def distr_df(ranking_path, op_path, other_paths, review_path, num_str=15):
     score["Proposal Name"] = short_names
     props = score[["Reviewer Name", "Proposal Name"]].copy()
     reviewers = score[["Reviewer Name"]].copy()
+
     reviews_df = pd.read_csv(review_path, header=0, index_col=0)
-    return score, props, reviewers, reviews_df
+    review = pd.DataFrame()
+    for rest_name in list(reviews_df.columns):
+        for review_name in list(reviews_df.index):
+            dict = {"Reviewer Name": review_name, 
+                    "Proposal Name": rest_name,
+                    "One-word Rating": reviews_df.loc[review_name][rest_name]}
+            review = review.append(dict, ignore_index=True)
+    #review = score.merge(review, how="left", on=["Reviewer Name", "Proposal Name"])
+    return score, props, reviewers, review
 
 def rankings(path):
     df = pd.read_csv(path, header=0, index_col=0)
