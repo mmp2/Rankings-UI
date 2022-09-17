@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, "rankings_UI")
 from GUI import GUI
 from pre_process import process_into_dataframes, get_rankings
 from Proposal import Proposals
