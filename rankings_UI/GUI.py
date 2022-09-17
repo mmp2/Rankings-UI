@@ -1,3 +1,4 @@
+from email.policy import default
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
@@ -8,28 +9,25 @@ from start_window import legend_window
 from filter import filter_window
 import toml
 
-configs = toml.load("config_rest.toml")
-NAME = configs["default"]["name"]
-ATTR_TO_RAT = configs["graphic_to_rating"]
-LEN_SHORT_NAME = configs["default"]["num_str"]
-DEFAULT_GRAP_ATTR = configs["default_graphic_attributes"]
-BOX_COLOR_DICT = configs['box_graph_attributes']["color"]
-OUTLINE_DICT = configs['box_graph_attributes']["outline"]
-WIDTH_DICT = configs['box_graph_attributes']["width"]
-DASH_DICT = configs['box_graph_attributes']["dash"]
-BOX_WIDTH = configs["box_size"]["box_width"]
-BOX_HEIGHT = configs["box_size"]["box_height"]
-BOX_DISTANCE_X = configs["box_size"]["box_distance_x"]
-BOX_DISTANCE_Y = configs["box_size"]["box_distance_y"]
-LIST_REVIEW_TITLES = configs["review"]["titles"]
-
 class GUI:
-    def __init__(self, rankings, reviewers, reviews, props, attr_to_rat=ATTR_TO_RAT):
-        """
-        rankings, reviewers, reviews, props: Similar classes that contains all specific functional methods as in examples.
-        attr_to_rat: A dictionary that contains the relationship between each graphical attribute to a rating.
-        """
-        self.attr_to_rat = attr_to_rat
+    def __init__(self, rankings, reviewers, reviews, props, configs_path):
+
+        configs = toml.load(configs_path)
+        self.name = configs["default"]["name"]
+        self.attr_to_rat = configs["graphic_to_rating"]
+        self.rat_min = configs["default"]["rat_min"]
+        self.rat_max = configs["default"]["rat_max"]
+        self.LEN_SHORT_NAME = configs["default"]["num_str"]
+        self.default_grap_attr = configs["default_graphic_attributes"]
+        self.box_color_dict = configs['box_graph_attributes']["color"]
+        self.outline_dict = configs['box_graph_attributes']["outline"]
+        self.width_dict = configs['box_graph_attributes']["width"]
+        self.dash_dict = configs['box_graph_attributes']["dash"]
+        self.box_width = configs["box_size"]["box_width"]
+        self.box_height = configs["box_size"]["box_height"]
+        self.box_distance_x = configs["box_size"]["box_distance_x"]
+        self.box_distance_y = configs["box_size"]["box_distance_y"]
+        self.yesno_list = configs["filter"]["yesno_list"]
 
         self.rankings = rankings
         self.reviewers = reviewers
@@ -37,7 +35,7 @@ class GUI:
         self.props = props
 
         self.root = Tk()
-        self.root.title(NAME)
+        self.root.title(self.name)
         screen_height = self.root.winfo_screenheight()
         y = int(round((screen_height/2) - (700/2)))
         self.root.geometry(f'800x700+100+{str(y)}')
@@ -59,6 +57,7 @@ class GUI:
         self.filter_dict = {}
         for rating in self.rankings.get_all_sub_ratings():
             self.filter_dict[rating] = self.rate_range
+
         self.intial_canvas()
         self.init_number()
         self.init_tied_rect()
@@ -81,7 +80,7 @@ class GUI:
                             y0_f = y0
                         if y1 > y1_f:
                             y1_f = y1
-                    self.canvas.create_rectangle(x0_f-BOX_DISTANCE_X*1/3, y0_f-BOX_DISTANCE_Y*1/3, x1_f+BOX_DISTANCE_X*1/3, y1_f+BOX_DISTANCE_Y*1/3)
+                    self.canvas.create_rectangle(x0_f-self.box_distance_x*1/3, y0_f-self.box_distance_y*1/3, x1_f+self.box_distance_x*1/3, y1_f+self.box_distance_y*1/3)
 
     def init_number(self):
         self.canvas.create_text(20, 12, text="Merit", font=("Arial", 12))
@@ -100,41 +99,41 @@ class GUI:
                 rate = int(rates[j])
                 for k in range(len(op_dict[keys[i]][rates[j]])):
                     delta_x = 0
-                    self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (50+i*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 50+(i+1)*BOX_WIDTH+i*BOX_DISTANCE_X+delta_x, 
-                                2*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+k*(BOX_HEIGHT+BOX_DISTANCE_Y)+(5-rate)*BOX_DISTANCE_Y,
-                                3*BOX_HEIGHT+(5-rate)*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+k*(BOX_HEIGHT+BOX_DISTANCE_Y)+(5-rate)*BOX_DISTANCE_Y)
+                    self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (50+i*self.box_width+i*self.box_distance_x+delta_x, 50+(i+1)*self.box_width+i*self.box_distance_x+delta_x, 
+                                2*self.box_height+(5-rate)*(self.box_height+self.box_distance_y)*num_most+k*(self.box_height+self.box_distance_y)+(5-rate)*self.box_distance_y,
+                                3*self.box_height+(5-rate)*(self.box_height+self.box_distance_y)*num_most+k*(self.box_height+self.box_distance_y)+(5-rate)*self.box_distance_y)
         self.lines_pos = []
         self.ver_lin_pos = []
         for rate in range(5):
-            self.lines_pos.append((0, BOX_DISTANCE_Y+BOX_HEIGHT+rate*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+rate*BOX_DISTANCE_Y, 2200, BOX_DISTANCE_Y+BOX_HEIGHT+rate*(BOX_HEIGHT+BOX_DISTANCE_Y)*num_most+rate*BOX_DISTANCE_Y))
+            self.lines_pos.append((0, self.box_distance_y+self.box_height+rate*(self.box_height+self.box_distance_y)*num_most+rate*self.box_distance_y, 2200, self.box_distance_y+self.box_height+rate*(self.box_height+self.box_distance_y)*num_most+rate*self.box_distance_y))
             
         for i in range(len(self.columns)):
-            self.ver_lin_pos.append((i*BOX_WIDTH+50+i*BOX_DISTANCE_X, 0, i*BOX_WIDTH+50+i*BOX_DISTANCE_X, 2200))
-            self.ver_lin_pos.append(((i+1)*BOX_WIDTH+50+i*BOX_DISTANCE_X, 0, (i+1)*BOX_WIDTH+50+i*BOX_DISTANCE_X, 2200))
+            self.ver_lin_pos.append((i*self.box_width+50+i*self.box_distance_x, 0, i*self.box_width+50+i*self.box_distance_x, 2200))
+            self.ver_lin_pos.append(((i+1)*self.box_width+50+i*self.box_distance_x, 0, (i+1)*self.box_width+50+i*self.box_distance_x, 2200))
 
     def get_dash(self, reviewer, prop):
         if self.attr_to_rat["Dash"] == "None":
-            return DEFAULT_GRAP_ATTR["dash"]
+            return self.default_grap_attr["dash"]
         rating = self.rankings.get_sub_rating(self.attr_to_rat["Dash"], reviewer, prop)
-        return DASH_DICT[rating]
+        return self.dash_dict[rating]
 
     def get_outline(self, reviewer, prop):
         if self.attr_to_rat["Outline"] == "None":
-            return DEFAULT_GRAP_ATTR["outline"]
+            return self.default_grap_attr["outline"]
         rating = self.rankings.get_sub_rating(self.attr_to_rat["Outline"], reviewer, prop)
-        return OUTLINE_DICT[rating]
+        return self.outline_dict[rating]
 
     def get_width(self, reviewer, prop):
         if self.attr_to_rat["Width"] == "None":
-            return DEFAULT_GRAP_ATTR["width"]
+            return self.default_grap_attr["width"]
         rating = self.rankings.get_sub_rating(self.attr_to_rat["Width"], reviewer, prop)
-        return WIDTH_DICT[rating]
+        return self.width_dict[rating]
     
     def intial_canvas(self):
         self.get_all_pos()
         self.prop_boxes = []
         for i in range(len(self.columns)):
-            box = Proposal_Box(self.canvas, reviewer=self.columns[i], pos=(i*BOX_WIDTH+50+i*BOX_DISTANCE_X, (i+1)*BOX_WIDTH+50+i*BOX_DISTANCE_X, 0, BOX_HEIGHT))
+            box = Proposal_Box(self.canvas, reviewer=self.columns[i], pos=(i*self.box_width+50+i*self.box_distance_x, (i+1)*self.box_width+50+i*self.box_distance_x, 0, self.box_height))
         for pair in self.pos.keys():   
             color = self.get_box_color(pair[0], pair[1])
             dash = self.get_dash(pair[0], pair[1])
@@ -160,7 +159,7 @@ class GUI:
     def swap_left(self, event):
         x = self.canvas.canvasx(event.x)
         y = self.canvas.canvasy(event.y)
-        if y <= BOX_HEIGHT:
+        if y <= self.box_height:
             item = self.canvas.find_closest(x, y, halo=2)
 
             _type = self.canvas.type(item)
@@ -171,10 +170,10 @@ class GUI:
             index = self.columns.index(cur_rev)
             if index != 0:  
                 left_rev = self.columns[index-1]
-                self.canvas.move(left_rev, BOX_WIDTH+BOX_DISTANCE_X, 0)
-                self.canvas.move(cur_rev+"text", -(BOX_WIDTH+BOX_DISTANCE_X), 0)
-                self.canvas.move(left_rev+"text", BOX_WIDTH+BOX_DISTANCE_X, 0)
-                self.canvas.move(cur_rev, -(BOX_WIDTH+BOX_DISTANCE_X), 0)
+                self.canvas.move(left_rev, self.box_width+self.box_distance_x, 0)
+                self.canvas.move(cur_rev+"text", -(self.box_width+self.box_distance_x), 0)
+                self.canvas.move(left_rev+"text", self.box_width+self.box_distance_x, 0)
+                self.canvas.move(cur_rev, -(self.box_width+self.box_distance_x), 0)
 
                 self.columns[index] = left_rev
                 self.columns[index-1] = cur_rev
@@ -185,8 +184,8 @@ class GUI:
         returns the color of a given proposal box based on its FQ ranking.
         """
         if self.attr_to_rat["Box_Background_Color"] == "None":
-            return DEFAULT_GRAP_ATTR["color"]
-        return BOX_COLOR_DICT[self.rankings.get_sub_rating(self.attr_to_rat["Box_Background_Color"],reviewer, proposal)]
+            return self.default_grap_attr["color"]
+        return self.box_color_dict[self.rankings.get_sub_rating(self.attr_to_rat["Box_Background_Color"],reviewer, proposal)]
 
     def closeWindow(self):
         self.root.destroy()
@@ -205,14 +204,11 @@ class GUI:
 
         self.popup = Menu(self.root, tearoff=0)
         
-        #self.popup.add_command(label="Legends", command=lambda: self.legend_sub())
-        
         self.popup.add_command(label="Filter", command=lambda: self.filter_rect())
         self.popup.add_separator()
         self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
         self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
         self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
-
 
         self.popup.add_separator()
         self.popup.add_command(label="Exit", command=lambda: self.closeWindow())
@@ -273,7 +269,6 @@ class GUI:
                 sub2_canvas.pack()
             else:
                 title = grap_attr
-                dic = self.attr_to_dict[grap_attr]
                 win3 = Toplevel(self.root)
                 win3.title(title)
                 win3.geometry('400x300')
@@ -284,46 +279,27 @@ class GUI:
                 dy = 30
                 ini_y = 15
                 sub2_canvas = tk.Canvas(win3, width=w, height=h, bg="white")
-                fill = {
-                    5: None,
-                    4: None,
-                    3: None,
-                    2: None,
-                    1: None
-                }
-                dash =  {
-                    5: None,
-                    4: None,
-                    3: None,
-                    2: None,
-                    1: None
-                }
-                outline =  {
-                    5: None,
-                    4: None,
-                    3: None,
-                    2: None,
-                    1: None
-                }
-                width =  {
-                    5: None,
-                    4: None,
-                    3: None,
-                    2: None,
-                    1: None
-                }
+                fill = {}
+                dash = {}
+                outline = {}
+                width = {}
+                for i in range(self.rat_min, self.rat_max+1):
+                    fill[str(i)] = None
+                    dash[str(i)] = None
+                    outline[str(i)] = None
+                    width[str(i)] = None
                 if grap_attr == "Box_Background_Color":
-                    fill = dic
+                    fill = self.box_color_dict
                 elif grap_attr == "Dash":
-                    dash = dic
+                    dash = self.dash_dict
                 elif grap_attr == "Outline":
-                    outline = dic
+                    outline = self.outline_dict
                 elif grap_attr == "Width":
-                    width = dic
+                    width = self.width_dict
                 for i in range(5, 0, -1):
                     sub2_canvas.create_text(x1, (i+1)*dy+ini_y, text=i)
-                    sub2_canvas.create_rectangle(x2, (i+1)*dy+ini_y, x2+0.4*BOX_WIDTH, (i+1)*dy+ini_y+BOX_HEIGHT, 
-                                                fill=fill[i], dash=dash[i], outline=outline[i], width=width[i])
+                    sub2_canvas.create_rectangle(x2, (i+1)*dy+ini_y, x2+0.4*self.box_width, (i+1)*dy+ini_y+self.box_height, 
+                                                fill=fill[str(i)], dash=dash[str(i)], outline=outline[str(i)], width=width[str(i)])
                     #sub2_canvas.create_text(x2, (i+1)*dy+ini_y, text=dic[i])
                 sub2_canvas.pack()
         sub_canvas.bind('<Double-1>', legend_subsub) 
@@ -338,9 +314,10 @@ class GUI:
             width = self.get_width(reviewer, prop)
             box.update_rect(color, dash, outline, width)
 
-    def filter_ratings(self, filter_dict, repo, topk):
-        self.filter_dict = filter_dict
-        show_rects = self.rankings.updated_pairs(filter_dict, repo, topk)
+    def filter_ratings(self, filter_dict, yesno_dict, topk):
+        #self.filter_dict = filter_dict
+        #self.yesno_list = yesno_dict
+        show_rects = self.rankings.updated_pairs(filter_dict, yesno_dict, topk)
         for box in self.prop_boxes:
             reviewer, prop = box.get_reviewer_prop()
             state = "hidden"
@@ -352,14 +329,12 @@ class GUI:
             box.update_text(state=state)
 
     def change_attribute(self):
-        self.window = legend_window(self.attr_to_rat, self)
+        dic = {i:self.attr_to_rat[i] for i in self.attr_to_rat if i!="Bands"}
+        self.window = legend_window(dic, self, self.rankings.get_all_sub_ratings())
         self.window.show()
-        #self.attr_to_rat = self.window.get_pair()
-        #self.update_all_rects()
 
     def filter_rect(self):
-        #if self.filter_dict == N
-        self.filter = filter_window(self, self.filter_dict, self.rate_range, len(self.rankings.columns))
+        self.filter = filter_window(self, self.filter_dict, self.yesno_list, self.rate_range, len(self.rankings.columns))
         self.filter.show()
 
     def rating_detail(self, reviewer, prop):
@@ -407,12 +382,13 @@ class GUI:
             rating.append(self.rankings.get_sub_rating(rate_name, reviewer, proposal))
             tree.heading(rate_name, text=rate_name)
         tree.insert('', 'end', iid='line1', values=tuple(rating))
-        tree.insert('', 'end', iid='line2', values=tuple(reviews))
+        if len(reviews) != 0:
+            tree.insert('', 'end', iid='line2', values=tuple(reviews))
         tree.pack(side=LEFT, fill=BOTH)
 
     def review_text(self, reviewer, proposal_name):
         list_reviews = self.reviews.get_all_review_sub(reviewer, proposal_name)
-        self.child_window_review(f"The Review of {proposal_name} by {reviewer}", list_reviews, list_review_titles=LIST_REVIEW_TITLES)
+        self.child_window_review(f"The Review of {proposal_name} by {reviewer}", list_reviews, list_review_titles=self.reviews.review_titles)
 
     def child_window_review(self, title, list_reviews, list_review_titles):
         win2 = Toplevel(self.root)

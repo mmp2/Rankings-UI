@@ -4,24 +4,21 @@ import tkinter as tk
 from tkinter import messagebox
 
 class filter_window:
-    def __init__(self, gui, attr, score_range, num_papers):
-        """
-        gui: The specific ranking GUI that is running.
-        attr: A dictionary of current relationship between graphical attribute and ratings.
-        score_range: A list range of scores of ratings.
-        num_papers: The number of proposals.
-        """
+    def __init__(self, gui, numerical_attr, yes_no_attr, score_range, num_papers) -> None:
         self.gui = gui
         self.root2 = Tk()
         self.root2.title('Filter Window for Rankings UI')
         self.root2.geometry('500x400+100+150')
         self.score_range = score_range
         self.num_papers = num_papers
-        self.ratings = list(attr.keys())
+        self.dict = numerical_attr
+        self.yesno_list = yes_no_attr
+        self.ratings = list(numerical_attr.keys())
         self.var_min = []
         self.var_max = []
-        self.tkvarq_req = StringVar(self.root2)
-        self.tkvarq_req.set("Please")
+
+        self.yesno_var = []
+
         self.tkvarq_topk = StringVar(self.root2)
         self.tkvarq_topk.set("Please Select a Topk")
         for i in range(len(self.ratings)):
@@ -33,6 +30,12 @@ class filter_window:
             self.var_min.append(tkvarq_min)
             self.create_wigets(self.ratings[i], i)
 
+        for i in range(len(yes_no_attr)):
+            tkvarq_yesno = StringVar(self.root2)
+            tkvarq_yesno.set("Please Select Yes/No")
+            self.yesno_var.append(tkvarq_yesno)
+            self.create_wigets_yesno(i)
+
         submit_button = Button(self.root2, text="Submit and Reopen the Main Window", command=self.return_pairs)
         paddings = {'padx': 2, 'pady': 5}
         submit_button.grid(column=1, row=len(self.ratings)+3)
@@ -41,24 +44,29 @@ class filter_window:
         label_max = ttk.Label(self.root2, text=f'Maximum Score')
         label_max.grid(column=2, row=0, sticky=tk.W, **paddings)
 
-        label_rep = ttk.Label(self.root2, text=f'Reproducibility:')
-        label_rep.grid(column=0, row=len(self.ratings)+1, sticky=tk.W, **paddings)
-        option_menu_req = ttk.OptionMenu(
-            self.root2,
-            self.tkvarq_req,
-            "Yes",
-            *["Yes", "No"])
-        option_menu_req.grid(column=1, row=len(self.ratings)+1, sticky=tk.W, **paddings)
-
         label_topk = ttk.Label(self.root2, text=f'Top-K Rankings:')
-        label_topk.grid(column=0, row=len(self.ratings)+2, sticky=tk.W, **paddings)
+        label_topk.grid(column=0, row=len(self.ratings)+len(self.yesno_list)+1, sticky=tk.W, **paddings)
         option_menu_topk = ttk.OptionMenu(
             self.root2,
             self.tkvarq_topk,
             str(num_papers),
             *range(1, self.num_papers+1))
-        option_menu_topk.grid(column=1, row=len(self.ratings)+2, sticky=tk.W, **paddings)
-        
+        option_menu_topk.grid(column=1, row=len(self.ratings)+len(self.yesno_list)+1, sticky=tk.W, **paddings)
+
+    def create_wigets_yesno(self, order):
+        # padding for widgets using the grid layout
+        paddings = {'padx': 2, 'pady': 5}
+
+        # label
+        label_yesno = ttk.Label(self.root2, text=self.yesno_list[order])
+        label_yesno.grid(column=0, row=len(self.ratings)+order+1, sticky=tk.W, **paddings)
+        option_menu_req = ttk.OptionMenu(
+            self.root2,
+            self.yesno_var[order],
+            "Yes",
+            *["Yes", "No"])
+        option_menu_req.grid(column=1, row=len(self.ratings)+order+1, sticky=tk.W, **paddings)
+
     def create_wigets(self, ga, order):
         # padding for widgets using the grid layout
         paddings = {'padx': 2, 'pady': 5}
@@ -83,6 +91,7 @@ class filter_window:
 
     def return_pairs(self):
         self.result = {}
+        self.yesno_ret = {}
         valid = True
         for i in range(len(self.ratings)):
             min = self.var_min[i].get()
@@ -92,14 +101,13 @@ class filter_window:
                 valid = False
                 break 
             self.result[self.ratings[i]] = [int(self.var_min[i].get()), int(self.var_max[i].get())]
+        for j in range(len(self.yesno_list)):
+            self.yesno_ret[self.yesno_list[j]] = str(self.yesno_var[j].get())
         if valid:
-            self.gui.filter_ratings(self.result, str(self.tkvarq_req.get()), int(self.tkvarq_topk.get()))
+            self.gui.filter_ratings(self.result, self.yesno_ret, int(self.tkvarq_topk.get()))
             self.root2.destroy()
     
     def show(self):
         self.root2.mainloop()
-
-    def get_pair(self):
-        return self.result
 
 
