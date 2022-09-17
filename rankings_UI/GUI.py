@@ -4,7 +4,7 @@ import tkinter as tk
 import sys
 import numpy as np
 from Proposal_Box import Proposal_Box
-from start_window import legend_window
+from legend_window import legend_window
 from filter import filter_window
 import toml
 
