@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, "ranking_UI")
 from rankings_UI import GUI
 from pre_process import distr_df, rankings
 from Proposal import Proposals
