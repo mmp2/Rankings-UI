@@ -199,16 +199,18 @@ class GUI:
         if _type != "rectangle":
             item  = (item[0]-1, )
         tags = self.canvas.gettags(item)
-        reviewer = tags[0]
-        prop = tags[1]
+
 
         self.popup = Menu(self.root, tearoff=0)
         
         self.popup.add_command(label="Filter", command=lambda: self.filter_rect())
         self.popup.add_separator()
-        self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
-        self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
-        self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
+        if len(tags) >= 2:
+            reviewer = tags[0]
+            prop = tags[1]
+            self.popup.add_command(label="Rating Details", command=lambda: self.rating_detail(reviewer, prop))
+            self.popup.add_command(label="Review Text", command=lambda: self.review_text(reviewer, prop))
+            self.popup.add_command(label="Proposal Details", command=lambda: self.proposal_detail(prop))
 
         self.popup.add_separator()
         self.popup.add_command(label="Exit", command=lambda: self.closeWindow())
@@ -419,7 +421,7 @@ class GUI:
     def set_up(self):
         self.canvas.pack(fill="both", expand=True)
         self.canvas.bind("<Configure>", self.show_width)
-        self.canvas.bind("<Button-2>", self.do_popup)
+        self.canvas.bind("<Button-3>", self.do_popup)
         self.canvas.bind("<ButtonRelease-1>",self.ret_colors)
         self.canvas.bind('<Double-1>', self.swap_left) 
         self.canvas.bind('<ButtonPress-1>', self.selectItem)
