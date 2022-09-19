@@ -52,8 +52,9 @@ class GUI:
         self.canvas = tk.Canvas(self.root, width=800, height=700, bg="white", yscrollcommand=self.scrlbar2.set, xscrollcommand=self.scrlbar.set,
                         confine=False, scrollregion=(0,0,1000,600))
         self.ties = self.rankings.ties
-        self.rate_range = range(0, 6)
+        self.rate_range = range(self.rat_min, self.rat_max+1)
         self.filter_dict = {}
+        self.tied_rect = []
         for rating in self.rankings.get_all_sub_ratings():
             self.filter_dict[rating] = self.rate_range
 
@@ -79,7 +80,7 @@ class GUI:
                             y0_f = y0
                         if y1 > y1_f:
                             y1_f = y1
-                    self.canvas.create_rectangle(x0_f-self.box_distance_x*1/3, y0_f-self.box_distance_y*1/3, x1_f+self.box_distance_x*1/3, y1_f+self.box_distance_y*1/3)
+                    self.canvas.create_rectangle(x0_f-self.box_distance_x*1/3, y0_f-self.box_distance_y*1/3, x1_f+self.box_distance_x*1/3, y1_f+self.box_distance_y*1/3, tag=(f"{reviewer}tie", ))
 
     def init_number(self):
         self.canvas.create_text(20, 12, text="Merit", font=("Arial", 12))
@@ -160,7 +161,6 @@ class GUI:
         y = self.canvas.canvasy(event.y)
         if y <= self.box_height:
             item = self.canvas.find_closest(x, y, halo=2)
-
             _type = self.canvas.type(item)
             if _type != "rectangle":
                 item  = (item[0]-1, )
@@ -173,7 +173,8 @@ class GUI:
                 self.canvas.move(cur_rev+"text", -(self.box_width+self.box_distance_x), 0)
                 self.canvas.move(left_rev+"text", self.box_width+self.box_distance_x, 0)
                 self.canvas.move(cur_rev, -(self.box_width+self.box_distance_x), 0)
-
+                self.canvas.move(cur_rev+"tie", -(self.box_width+self.box_distance_x), 0)
+                self.canvas.move(left_rev+"tie", self.box_width+self.box_distance_x, 0)
                 self.columns[index] = left_rev
                 self.columns[index-1] = cur_rev
 
@@ -314,8 +315,6 @@ class GUI:
             box.update_rect(color, dash, outline, width)
 
     def filter_ratings(self, filter_dict, yesno_dict, topk):
-        #self.filter_dict = filter_dict
-        #self.yesno_list = yesno_dict
         show_rects = self.rankings.updated_pairs(filter_dict, yesno_dict, topk)
         for box in self.prop_boxes:
             reviewer, prop = box.get_reviewer_prop()
@@ -355,6 +354,9 @@ class GUI:
         l.config(font =("Times", "24", "bold"))
         T.config(font =("Times", "16"))
 
+    def show_width(self, event):
+        self.canvas.itemconfigure("event", text="event.width: %s" % event.width)
+        self.canvas.itemconfigure("cget", text="winfo_width: %s" % event.widget.winfo_width())
 
 
     def child_window_ratings(self, name, reviewer, proposal):
@@ -415,11 +417,12 @@ class GUI:
         scroll.pack(side=RIGHT, fill=Y, expand=True)
 
     def set_up(self):
-        self.canvas.bind("<Button-2>", self.do_popup)
+        self.canvas.pack(fill="both", expand=True)
+        self.canvas.bind("<Configure>", self.show_width)
+        self.canvas.bind("<Button-3>", self.do_popup)
         self.canvas.bind("<ButtonRelease-1>",self.ret_colors)
         self.canvas.bind('<Double-1>', self.swap_left) 
         self.canvas.bind('<ButtonPress-1>', self.selectItem)
-        self.canvas.pack()
 
     def ret_colors(self, event):
         x = self.canvas.canvasx(event.x)
