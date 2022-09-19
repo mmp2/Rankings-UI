@@ -419,7 +419,7 @@ class GUI:
     def set_up(self):
         self.canvas.pack(fill="both", expand=True)
         self.canvas.bind("<Configure>", self.show_width)
-        self.canvas.bind("<Button-3>", self.do_popup)
+        self.canvas.bind("<Button-2>", self.do_popup)
         self.canvas.bind("<ButtonRelease-1>",self.ret_colors)
         self.canvas.bind('<Double-1>', self.swap_left) 
         self.canvas.bind('<ButtonPress-1>', self.selectItem)
