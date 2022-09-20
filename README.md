@@ -1,13 +1,10 @@
 # Rankings-UI
 
-This is a ranking UI that can visualize a CSV file that contains the reviews and rankings from multiple reviewers to multiple proposals.
+This is a ranking UI that can visualize a series of ratings and rankings from multiple reviewers to multiple proposals. 
 
-Run the main.py file and then type in the CSV file name without any punctuation.(give an example here)
-
-
-TO DO's
-
-
+How to run it
+======
+Users might need to preprocess different input files into specific format and pass them into the classes of Ranking, Review, Reviewer, and 
 
 Tasks
 ======
