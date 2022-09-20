@@ -55,9 +55,15 @@ class GUI:
         self.rate_range = range(self.rat_min, self.rat_max+1)
         self.filter_dict = {}
         self.tied_rect = []
+        self.default_filter = {
+            "topk": len(self.rankings.columns)
+        }
         for rating in self.rankings.get_all_sub_ratings():
             self.filter_dict[rating] = self.rate_range
-
+            self.default_filter[rating] = self.rate_range
+        for yesno in self.yesno_list:
+            self.default_filter[yesno] = "Yes"
+    
         self.intial_canvas()
         self.init_number()
         self.init_tied_rect()
@@ -317,7 +323,13 @@ class GUI:
             box.update_rect(color, dash, outline, width)
 
     def filter_ratings(self, filter_dict, yesno_dict, topk):
+        for rating in filter_dict:
+            self.default_filter[rating] = filter_dict[rating]
+        for yesno in yesno_dict:
+            self.default_filter[yesno] = yesno_dict[yesno]
+        self.default_filter["topk"] = topk
         show_rects = self.rankings.updated_pairs(filter_dict, yesno_dict, topk)
+
         for box in self.prop_boxes:
             reviewer, prop = box.get_reviewer_prop()
             state = "hidden"
@@ -334,7 +346,7 @@ class GUI:
         self.window.show()
 
     def filter_rect(self):
-        self.filter = filter_window(self, self.filter_dict, self.yesno_list, self.rate_range, len(self.rankings.columns))
+        self.filter = filter_window(self, self.filter_dict, self.yesno_list, self.rate_range, len(self.rankings.columns),self.default_filter)
         self.filter.show()
 
     def rating_detail(self, reviewer, prop):

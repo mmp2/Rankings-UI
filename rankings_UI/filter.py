@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 class filter_window:
-    def __init__(self, gui, numerical_attr, yes_no_attr, score_range, num_papers) -> None:
+    def __init__(self, gui, numerical_attr, yes_no_attr, score_range, num_papers, defalut_dict=None) -> None:
         self.gui = gui
         self.root2 = Tk()
         self.root2.title('Filter Window for Rankings UI')
@@ -18,7 +18,7 @@ class filter_window:
         self.var_max = []
 
         self.yesno_var = []
-
+        self.default_dict = defalut_dict
         self.tkvarq_topk = StringVar(self.root2)
         self.tkvarq_topk.set("Please Select a Topk")
         for i in range(len(self.ratings)):
@@ -49,7 +49,7 @@ class filter_window:
         option_menu_topk = ttk.OptionMenu(
             self.root2,
             self.tkvarq_topk,
-            str(num_papers),
+            str(self.default_dict["topk"]),
             *range(1, self.num_papers+1))
         option_menu_topk.grid(column=1, row=len(self.ratings)+len(self.yesno_list)+1, sticky=tk.W, **paddings)
 
@@ -63,26 +63,25 @@ class filter_window:
         option_menu_req = ttk.OptionMenu(
             self.root2,
             self.yesno_var[order],
-            "Yes",
+            self.default_dict[self.yesno_list[order]],
             *["Yes", "No"])
         option_menu_req.grid(column=1, row=len(self.ratings)+order+1, sticky=tk.W, **paddings)
 
-    def create_wigets(self, ga, order):
+    def create_wigets(self, label, order):
         # padding for widgets using the grid layout
         paddings = {'padx': 2, 'pady': 5}
-
         # label
-        label1 = ttk.Label(self.root2, text=f'{ga}:')
+        label1 = ttk.Label(self.root2, text=f'{label}:')
         label1.grid(column=0, row=order+1, sticky=tk.W, **paddings)
         option_menu_max = ttk.OptionMenu(
             self.root2,
             self.var_max[order],
-            str(max(self.dict[ga])),
+            str(max(self.default_dict[label])),
             *self.score_range)
         option_menu_min = ttk.OptionMenu(
             self.root2,
             self.var_min[order],
-            str(min(self.dict[ga])),
+            str(min(self.default_dict[label])),
             *self.score_range)
 
         option_menu_max.grid(column=2, row=order+1, sticky=tk.W, **paddings)
