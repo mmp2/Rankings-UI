@@ -15,6 +15,7 @@ Rankings(rating_df, ranking, ties, rating_names, reviewer_col_name="Reviewer Nam
   - reviewer_col_name: The column name of the reviewer names that the users gave in the dataframe of rating_df. The default is "Reviewer Name".
   - prop_col_name: The column name of the proposal names that the users gave in the dataframe of rating_df. The default is "Proposal Name".
   - reviewer_col_name: The column name of the overall merit that the users gave in the dataframe of rating_df. The default is "Overall Score".
+
 Reviews(df, review_titles, prop_colname="Proposal Name", reviewer_colname="Reviewer Name", str_wrap_len=35)
   - df: A dataframe without any index that has columns for every review text, proposal names, reviewers names, and numerical ratings (optional), and each row contains review text of the proposal given by the reviewer.
   - review_titles: A list of column names of each review title in the df above.
