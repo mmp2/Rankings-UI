@@ -2,7 +2,9 @@
 name = 'Rankings UI'
 num_str = 15
 rat_min = 1
-rat_max = 6
+rat_max = 7
+overall_merit_max = 7
+overall_merit_min = 1
 topk = 6
 
 [default_graphic_attributes]
@@ -32,6 +34,8 @@ box_distance_y = 10
 
 [box_graph_attributes]
     [box_graph_attributes.color]
+    7 = "grey"
+    6 = "black"
     5 = "white"
     4 = "wheat1"
     3 = "wheat2"
@@ -39,6 +43,8 @@ box_distance_y = 10
     1 = "wheat4"
 
     [box_graph_attributes.outline]
+    7 = "yellow"
+    6 = "pink"
     5 = "blue"
     4 = "red"
     3 = "purple"
@@ -46,6 +52,8 @@ box_distance_y = 10
     1 = "black"
 
     [box_graph_attributes.width]
+    7 = 11
+    6 = 9
     5 = 7
     4 = 5
     3 = 3
@@ -53,6 +61,8 @@ box_distance_y = 10
     1 = 0
 
     [box_graph_attributes.dash]
+    7 = [32]
+    6 = []
     5 = []
     4 = [5]
     3 = [50, 50, 2]
