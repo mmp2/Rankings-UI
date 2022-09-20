@@ -3,6 +3,8 @@ name = 'Rankings UI'
 num_str = 15
 rat_min = 1
 rat_max = 5
+overall_merit_max = 5
+overall_merit_min = 1
 topk = 6
 
 [default_graphic_attributes]
