@@ -27,6 +27,8 @@ class GUI:
         self.box_distance_x = configs["box_size"]["box_distance_x"]
         self.box_distance_y = configs["box_size"]["box_distance_y"]
         self.yesno_list = configs["filter"]["yesno_list"]
+        self.overall_merit_max = configs["default"]["overall_merit_max"]
+        self.overall_merit_min = configs["default"]["overall_merit_min"]
 
         self.rankings = rankings
         self.reviewers = reviewers
@@ -90,10 +92,10 @@ class GUI:
 
     def init_number(self):
         self.canvas.create_text(20, 12, text="Merit", font=("Arial", 12))
-        for i in range(1, 6):
+        for i in range(self.overall_merit_min, self.overall_merit_max+1):
             y0 = self.lines_pos[i-1][1]
             y1 = self.lines_pos[i-1][1]+40
-            self.canvas.create_text(15,(y0+y1)//2, text=str(6-i), font=("Arial", 25))
+            self.canvas.create_text(15,(y0+y1)//2, text=str(self.overall_merit_max+1-i), font=("Arial", 25))
 
     def get_all_pos(self):
         op_dict, num_most = self.rankings.get_op_rankings()
@@ -106,12 +108,12 @@ class GUI:
                 for k in range(len(op_dict[keys[i]][rates[j]])):
                     delta_x = 0
                     self.pos[keys[i], op_dict[keys[i]][rates[j]][k]] = (50+i*self.box_width+i*self.box_distance_x+delta_x, 50+(i+1)*self.box_width+i*self.box_distance_x+delta_x, 
-                                2*self.box_height+(5-rate)*(self.box_height+self.box_distance_y)*num_most+k*(self.box_height+self.box_distance_y)+(5-rate)*self.box_distance_y,
-                                3*self.box_height+(5-rate)*(self.box_height+self.box_distance_y)*num_most+k*(self.box_height+self.box_distance_y)+(5-rate)*self.box_distance_y)
+                                2*self.box_height+(self.overall_merit_max-rate)*(self.box_height+self.box_distance_y)*num_most+k*(self.box_height+self.box_distance_y)+(self.overall_merit_max-rate)*self.box_distance_y,
+                                3*self.box_height+(self.overall_merit_max-rate)*(self.box_height+self.box_distance_y)*num_most+k*(self.box_height+self.box_distance_y)+(self.overall_merit_max-rate)*self.box_distance_y)
         self.lines_pos = []
         self.ver_lin_pos = []
-        for rate in range(5):
-            self.lines_pos.append((0, self.box_distance_y+self.box_height+rate*(self.box_height+self.box_distance_y)*num_most+rate*self.box_distance_y, 2200, self.box_distance_y+self.box_height+rate*(self.box_height+self.box_distance_y)*num_most+rate*self.box_distance_y))
+        for rate in range(self.overall_merit_max-self.overall_merit_min+1):
+            self.lines_pos.append((0, self.box_distance_y+self.box_height+rate*(self.box_height+self.box_distance_y)*num_most+rate*self.box_distance_y, len(keys)*270, self.box_distance_y+self.box_height+rate*(self.box_height+self.box_distance_y)*num_most+rate*self.box_distance_y))
             
         for i in range(len(self.columns)):
             self.ver_lin_pos.append((i*self.box_width+50+i*self.box_distance_x, 0, i*self.box_width+50+i*self.box_distance_x, 2200))
