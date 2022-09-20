@@ -8,8 +8,13 @@ Users might need to preprocess different input files into specific format and pa
 
 Specific Format for Each Class
 ------
-Rankings()
-
+Rankings(rating_df, ranking, ties, rating_names, reviewer_col_name="Reviewer Name", prop_col_name="Proposal Name", overall_col_name="Overall Score"):
+  rating_df: A pandas dataframe without any index that has columns for every rating, reviewer name, proposal name, and overall merit, and each row contains ratings that a given reviewer gave for a given proposal. 
+  ranking: A dictionary that the keys are the reviewer names and the values are the list of proposals in the descending ranking order that the reviewer gave.
+  rating_names: A list of rating names.
+  reviewer_col_name: The column name of the reviewer names that the users gave in the dataframe of rating_df. The default is "Reviewer Name".
+  prop_col_name: The column name of the proposal names that the users gave in the dataframe of rating_df. The default is "Proposal Name".
+  reviewer_col_name: The column name of the overall merit that the users gave in the dataframe of rating_df. The default is "Overall Score".
 Reviews()
 
 Reviewers()
