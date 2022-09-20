@@ -4,7 +4,17 @@ This is a ranking UI that can visualize a series of ratings and rankings from mu
 
 How to run it
 ======
-Users might need to preprocess different input files into specific format and pass them into the classes of Ranking, Review, Reviewer, and 
+Users might need to preprocess different input files into specific format and pass them into the classes of Rankings, Reviews, Reviewers, and Proposals, and then to pass the four classes and a configuration file into the GUI.
+
+Specific Format for Each Class
+------
+Rankings()
+
+Reviews()
+
+Reviewers()
+
+Proposals()
 
 Tasks
 ======
