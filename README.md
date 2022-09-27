@@ -10,7 +10,7 @@ Download the package:
 ```
 pip install Rankings_UI
 ```
-======
+-----
 Users might need to preprocess different input files into specific format and pass them into the classes of Rankings, Reviews, Reviewers, and Proposals, and then to pass the four classes and a configuration file into the GUI.
 
 Specific Parameter Format for Each Class
