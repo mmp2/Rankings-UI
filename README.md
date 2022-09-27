@@ -5,7 +5,7 @@ This is a ranking UI that can visualize a series of ratings and rankings from mu
 How to run it
 ======
 Before download the package, please make sure you have installed all dependencies, e.g., toml, pandas, tkinter.
-======
+
 Download the package:
 ```
 pip install Rankings_UI
