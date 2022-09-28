@@ -15,6 +15,14 @@ Users might need to preprocess different input files into specific format and pa
 
 Specific Parameter Format for Each Class
 ------
+GUI(rankings, reviewers, reviews, props, configs_path, mactouchpad=True)
+  - rankings: The Rankings class constructed by using the input files.
+  - reviewers: The Reviewers class constructed by using the input files.
+  - reviews: The Reviews class constructed by using the input files.
+  - props: The Rroposals class constructed by using the input files.
+  - configs_path: The path of the configuration file.
+  - mactouchpad: The variable indicating if the user is using a macbook touchpad. The default is True.
+
 Rankings(rating_df, ranking, ties, rating_names, reviewer_col_name="Reviewer Name", prop_col_name="Proposal Name", overall_col_name="Overall Score")
   - rating_df: A pandas dataframe without any index that has columns for every rating, reviewer name, proposal name, and overall merit, and each row contains ratings that a given reviewer gave for a given proposal. 
   - ranking: A dictionary that the keys are the reviewer names and the values are the list of proposals in the descending ranking order that the reviewer gave.
