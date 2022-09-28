@@ -1,4 +1,4 @@
-# Rankings-UI
+# rankingTool
 
 This is a ranking UI that can visualize a series of ratings and rankings from multiple reviewers to multiple proposals. 
 
@@ -8,7 +8,7 @@ Before download the package, please make sure you have installed all dependencie
 
 Download the package:
 ```
-pip install Rankings_UI
+pip install rankingTool==0.9
 ```
 -----
 Users might need to preprocess different input files into specific format and pass them into the classes of Rankings, Reviews, Reviewers, and Proposals, and then to pass the four classes and a configuration file into the GUI.
@@ -71,13 +71,3 @@ tkinter text attributes
 Notes to add in the user manual
 ================================
 NOTE for Mac users. On my Mac book Pro, no combination works for "right clicking" on a reviewed item. I connect a _classic mouse_ and use the _middle button_. **(Murray: It should be working now, and it works on my MacBook. I used the double finger to touch the touchpad. But the window user should click the scroll of the mouse.)** excellent --> keeping it for user manual
-
-## To run the GUI, simply type below in the terminal
-```
-python main.py --rating_path xxx --ranking_path xxx --num xxx
-```
-
-For example:
-```
-python main.py --rating_path "dummy_ICML.xls" --ranking_path "ReviewerSubmissionComparisons.txt" --num 15
-```
