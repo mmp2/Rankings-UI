@@ -1,19 +1,14 @@
-import sys
-import os
-path_to_package = os.path.join(os.path.abspath(os.getcwd()), "rankings_UI")
-path_to_dir = os.path.abspath(os.getcwd())
-sys.path.append(path_to_package)
-sys.path.append(path_to_dir)
-from GUI import GUI
 from pre_process import process_into_dataframes, get_rankings
-from Proposal import Proposals
-from Ranking import Rankings
-from Review import Reviews
-from Reviewer import Reviewers
+from rankingTool.GUI import GUI
+from rankingTool.Proposal import Proposals
+from rankingTool.Ranking import Rankings
+from rankingTool.Review import Reviews
+from rankingTool.Reviewer import Reviewers
+from rankingTool.Proposal import Proposals
 
-RANKING_PATH = os.path.join(os.path.abspath(os.getcwd()), "Examples/Paper Review Example/dummy_ranking.txt")
-RATINGS_PATH = os.path.join(os.path.abspath(os.getcwd()), "Examples/Paper Review Example/dummy_rating.xls")
-config_path = os.path.join(os.path.abspath(os.getcwd()), "Examples/Paper Review Example/config.toml")
+RANKING_PATH = "Examples/Paper Review Example/dummy_ranking.txt"
+RATINGS_PATH =  "Examples/Paper Review Example/dummy_rating.xls"
+config_path = "Examples/Paper Review Example/config.toml"
 titles = ["Summary", "Detailed Comments", "Questions for Author", "Anonymity", "Anonymity Details","Handled Previously"]
 
 ratings, props, reviewers, reivews = process_into_dataframes(RATINGS_PATH, 15)
