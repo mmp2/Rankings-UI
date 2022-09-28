@@ -30,9 +30,11 @@ Reviews(df, review_titles, prop_colname="Proposal Name", reviewer_colname="Revie
   - reviewer_col_name: The column name of the reviewer names that the users gave in the dataframe of rating_df. The default is "Reviewer Name".
   - str_wrap_len: A int that indicated the length of string wrapped in the window of review text. The default is 35.
 
-Reviewers()
+Reviewers(df)
+  - df: The rating_df in the Rankings.
 
-Proposals()
+Proposals(df)
+  - df: The rating_df in the Rankings.
 
 Tasks
 ======
