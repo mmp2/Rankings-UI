@@ -21,7 +21,7 @@ GUI(rankings, reviewers, reviews, props, configs_path, mactouchpad=True)
   - reviews: The Reviews class constructed by using the input files.
   - props: The Rroposals class constructed by using the input files.
   - configs_path: The path of the configuration file.
-  - mactouchpad: The variable indicating if the user is using a macbook touchpad. The default is True.
+  - mactouchpad: The variable indicating if the user is using a macbook touchpad. The default is True. If using a classic mouse, please turn it to False.
 
 Rankings(rating_df, ranking, ties, rating_names, reviewer_col_name="Reviewer Name", prop_col_name="Proposal Name", overall_col_name="Overall Score")
   - rating_df: A pandas dataframe without any index that has columns for every rating, reviewer name, proposal name, and overall merit, and each row contains ratings that a given reviewer gave for a given proposal. 
