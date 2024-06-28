@@ -81,3 +81,13 @@ tkinter text attributes
 Notes to add in the user manual
 ================================
 NOTE for Mac users. On my Mac book Pro, no combination works for "right clicking" on a reviewed item. I connect a _classic mouse_ and use the _middle button_. **(Murray: It should be working now, and it works on my MacBook. I used the double finger to touch the touchpad. But the window user should click the scroll of the mouse.)** excellent --> keeping it for user manual
+
+Contributors (in alphabetical order)
+====================================
+* Lexi Liu rankings-UI V2 (visual display of consensus)
+* Murray Haoqian Kang **original repository creator**, wrote rankings-UI V1 code (visual display of reviewing results) 
+* Marina Meila Professor, UW, concept, scientific advisor
+
+  Acknowledgements
+  ================
+  This project is funded by NSF award 2019901 _Improving Panel Decision Making: Understanding Methods for Aggregating Reviewer Opinions_
