@@ -1,4 +1,0 @@
-Reviewer Email	Rating	# Paper ID	Meta-Reviewer Email
-xxx@gmail.com	Met Expectations	554	yyy@hotmail.com
-huhu@pku.edu.cn	Exceeded Expectations	222	a@b.edu
-rrr@haha.com	Failed to Meet Expectations	3539	c@dddd.edu
