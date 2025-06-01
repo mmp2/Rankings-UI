@@ -1,6 +1,6 @@
-# rankingTool
+# ImPaCT
 
-This is a ranking UI that can visualize a series of ratings and rankings from multiple reviewers to multiple proposals. 
+Improving Panel Consensus Tool (ImPaCT)  is a GUI that can visualize a series of ratings and rankings from multiple reviewers to multiple proposals. 
 
 How to run it
 ======
