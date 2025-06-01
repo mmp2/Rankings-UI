@@ -8,44 +8,27 @@ Before download the package, please make sure you have installed all dependencie
 
 Download the package:
 ```
-pip install rankingTool==1.0
+pip install git+https://github.com/lexilxu/Rankings-UI
 ```
 -----
-Users might need to preprocess different input files into specific format and pass them into the classes of Rankings, Reviews, Reviewers, and Proposals, and then to pass the four classes and a configuration file into the GUI.
-
-Specific Parameter Format for Each Class
-------
-GUI(rankings, reviewers, reviews, props, configs_path, mactouchpad=True)
-  - rankings: The Rankings class constructed by using the input files.
-  - reviewers: The Reviewers class constructed by using the input files.
-  - reviews: The Reviews class constructed by using the input files.
-  - props: The Rroposals class constructed by using the input files.
-  - configs_path: The path of the configuration file.
-  - mactouchpad: The variable indicating if the user is using a macbook touchpad. The default is True. If using a classic mouse, please turn it to False.
-
-Rankings(rating_df, ranking, ties, rating_names, reviewer_col_name="Reviewer Name", prop_col_name="Proposal Name", overall_col_name="Overall Score")
-  - rating_df: A pandas dataframe without any index that has columns for every rating, reviewer name, proposal name, and overall merit, and each row contains ratings that a given reviewer gave for a given proposal. 
-  - ranking: A dictionary that the keys are the reviewer names and the values are the list of proposals in the descending ranking order that the reviewer gave.
-  - rating_names: A list of rating names.
-  - reviewer_col_name: The column name of the reviewer names that the users gave in the dataframe of rating_df. The default is "Reviewer Name".
-  - prop_col_name: The column name of the proposal names that the users gave in the dataframe of rating_df. The default is "Proposal Name".
-  - reviewer_col_name: The column name of the overall merit that the users gave in the dataframe of rating_df. The default is "Overall Score".
-
-Reviews(df, review_titles, prop_colname="Proposal Name", reviewer_colname="Reviewer Name", str_wrap_len=35)
-  - df: A dataframe without any index that has columns for every review text, proposal names, reviewers names, and numerical ratings (optional), and each row contains review text of the proposal given by the reviewer.
-  - review_titles: A list of column names of each review title in the df above.
-  - prop_col_name: The column name of the proposal names that the users gave in the dataframe of rating_df. The default is "Proposal Name".
-  - reviewer_col_name: The column name of the reviewer names that the users gave in the dataframe of rating_df. The default is "Reviewer Name".
-  - str_wrap_len: A int that indicated the length of string wrapped in the window of review text. The default is 35.
-
-Reviewers(df)
-  - df: The rating_df in the Rankings.
-
-Proposals(df)
-  - df: The rating_df in the Rankings.
+To initialize the GUI, the user needs a configuration file. 
+An example of the configuration file is provided in config_rest.toml.
+After installation and preparation of the configuration file, the GUI can be opened by running the \texttt{main.py} file with the following codes:
+```
+instance = GUI(``config_rest.toml'')
+instance.show()
+```
 
 Tasks
 ======
+* Fix the problem with AStar
+* Better example to check the results.
+* Pop the load data window up again? Now it is one-time upload.
+* A bug with filtering --- cannot switch back to all items.
+* Proposal details?
+* Add a default directory in the configuration file.
+
+
 * Displaying reviews on a canvas as boxes, with graphical attributes that depend on the reviews 
 * Simple GUI  
   -- right click on box, displays menu + info

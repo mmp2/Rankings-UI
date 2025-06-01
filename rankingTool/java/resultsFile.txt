@@ -1,0 +1,38 @@
+Input
+
+n=12
+inputType=/Users/xuliu/Library/CloudStorage/OneDrive-UW/Rankings-UI-main/Restaurants_Example/Output/Mallows/clean.txt
+N=500
+theta=0.5
+decay=linear
+GMM=false
+beamwidth=1000
+iterations=3
+--------------------------------------
+Output
+
+Nodes Generated: 1112.0	 +- 0.0
+Nodes Generated as Multiple: 14.256412	 +- 0.0
+Fraction Finished in A*: 1.0
+Local Search Steps in FV: 6.0	 +- 0.0
+
+Running Times (in milliseconds):
+AStar: 0.33333334	 +- 0.47140452
+CSS: 0.33333334	 +- 0.47140452
+FV: 0.6666667	 +- 0.4714045
+Random: 0.6666667	 +- 0.4714045
+DK: 0.0	 +- 0.0
+
+Kendall Distance from Optimal Mode:
+CSS: 9.0	 +- 0.0
+FV: 0.0	 +- 0.0
+Random: 14.333333	 +- 1.2472198
+DK: 9.0	 +- 0.0
+
+Cost:
+AStar: 19.470879	 +- 0.0
+CSS: 19.603321	 +- 0.0
+FV: 19.46931	 +- 0.0
+Random: 19.682444	 +- 0.060515366
+DK: 19.507559	 +- 0.0
+

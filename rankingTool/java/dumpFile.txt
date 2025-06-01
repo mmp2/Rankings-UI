@@ -1,0 +1,115 @@
+Input
+
+n=12
+inputType=/Users/xuliu/Library/CloudStorage/OneDrive-UW/Rankings-UI-main/Restaurants_Example/Output/Mallows/clean.txt
+N=500
+theta=0.5
+decay=linear
+GMM=false
+beamwidth=1000
+iterations=3
+--------------------
+Iteration 1
+
+AStar
+Nodes Generated: 1112.0
+Nodes Generated as Multiple: 14.256411
+Running Time: 1.0
+Cost: 19.470879
+Modal Ranking: 11 6 1 4 5 10 8 3 12 7 9 2 
+theta value: 0.14257812
+
+CSS
+Distance from Optimal Mode: 9.0
+Cost: 19.603321
+Modal Ranking: 6 1 11 4 8 5 10 7 12 9 2 3 
+theta value: 0.123046875
+
+FV
+Distance from Optimal Mode: 0.0
+Cost: 19.46931
+Modal Ranking: 11 6 1 4 5 10 8 3 12 7 9 2 
+theta value: 0.14257812
+
+Rand
+Distance from Optimal Mode: 14.0
+Cost: 19.767456
+Modal Ranking: 6 8 11 5 3 1 10 4 9 12 7 2 
+theta value: 0.091796875
+
+DK
+Distance from Optimal Mode: 9.0
+Cost: 19.507559
+Modal Ranking: 11 6 1 12 5 10 3 4 8 7 9 2 
+theta value: 0.13867188
+
+Iteration 2
+
+AStar
+Nodes Generated: 1112.0
+Nodes Generated as Multiple: 14.256411
+Running Time: 0.0
+Cost: 19.470879
+Modal Ranking: 11 6 1 4 5 10 8 3 12 7 9 2 
+theta value: 0.14257812
+
+CSS
+Distance from Optimal Mode: 9.0
+Cost: 19.603321
+Modal Ranking: 6 1 11 4 8 5 10 7 12 9 2 3 
+theta value: 0.123046875
+
+FV
+Distance from Optimal Mode: 0.0
+Cost: 19.46931
+Modal Ranking: 11 6 1 4 5 10 8 3 12 7 9 2 
+theta value: 0.14257812
+
+Rand
+Distance from Optimal Mode: 13.0
+Cost: 19.645176
+Modal Ranking: 6 4 1 7 5 11 10 12 8 3 9 2 
+theta value: 0.115234375
+
+DK
+Distance from Optimal Mode: 9.0
+Cost: 19.507559
+Modal Ranking: 11 6 1 12 5 10 3 4 8 7 9 2 
+theta value: 0.13867188
+
+Iteration 3
+
+AStar
+Nodes Generated: 1112.0
+Nodes Generated as Multiple: 14.256411
+Running Time: 0.0
+Cost: 19.470879
+Modal Ranking: 11 6 1 4 5 10 8 3 12 7 9 2 
+theta value: 0.14257812
+
+CSS
+Distance from Optimal Mode: 9.0
+Cost: 19.603321
+Modal Ranking: 6 1 11 4 8 5 10 7 12 9 2 3 
+theta value: 0.123046875
+
+FV
+Distance from Optimal Mode: 0.0
+Cost: 19.46931
+Modal Ranking: 11 6 1 4 5 10 8 3 12 7 9 2 
+theta value: 0.14257812
+
+Rand
+Distance from Optimal Mode: 16.0
+Cost: 19.6347
+Modal Ranking: 11 6 12 1 5 7 3 8 4 10 9 2 
+theta value: 0.115234375
+
+DK
+Distance from Optimal Mode: 9.0
+Cost: 19.507559
+Modal Ranking: 11 6 1 12 5 10 3 4 8 7 9 2 
+theta value: 0.13867188
+
+-----------------------------
+-----------------------------

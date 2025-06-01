@@ -1,0 +1,8 @@
+n=12
+inputType=/Users/xuliu/Library/CloudStorage/OneDrive-UW/Rankings-UI-main/Restaurants_Example/Output/Mallows/clean.txt
+N=500
+theta=0.5
+decay=linear
+GMM=false
+beamwidth=1000
+iterations=3
