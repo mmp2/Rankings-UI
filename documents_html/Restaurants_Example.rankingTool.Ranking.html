@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module Restaurants_Example.rankingTool.Ranking</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="Restaurants_Example.html" class="white">Restaurants_Example</a>.<a href="Restaurants_Example.rankingTool.html" class="white">rankingTool</a>.Ranking</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/Users/xuliu/Library/CloudStorage/OneDrive-UW/Rankings-UI-main/Restaurants_Example/rankingTool/Ranking.py">/Users/xuliu/Library/CloudStorage/OneDrive-UW/Rankings-UI-main/Restaurants_Example/rankingTool/Ranking.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="math.html">math</a><br>
+</td><td class="multicolumn"><a href="numpy.html">numpy</a><br>
+</td><td class="multicolumn"><a href="pandas.html">pandas</a><br>
+</td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="Restaurants_Example.rankingTool.Ranking.html#Rankings">Rankings</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Rankings">class <strong>Rankings</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#Rankings">Rankings</a>(rating_df,&nbsp;ranking,&nbsp;ties,&nbsp;rating_names,&nbsp;onlyranks=False,&nbsp;reviewer_col_name='Reviewer&nbsp;Name',&nbsp;prop_col_name='Proposal&nbsp;Name',&nbsp;overall_col_name='Overall&nbsp;Score')<br>
+&nbsp;<br>
+This&nbsp;class&nbsp;retrieves&nbsp;information&nbsp;from&nbsp;the&nbsp;ratings&nbsp;and&nbsp;rankings&nbsp;dataset.<br>
+&nbsp;<br>
+Attributes:<br>
+-----<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rating_df&nbsp;(df):&nbsp;dataframe&nbsp;contains&nbsp;all&nbsp;ratings.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ranking&nbsp;(df):&nbsp;dataframe&nbsp;contains&nbsp;all&nbsp;rankings.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ties<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rating_names&nbsp;(list):&nbsp;list&nbsp;of&nbsp;the&nbsp;names&nbsp;of&nbsp;all&nbsp;sub&nbsp;ratings.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;onlyranks&nbsp;(bool):&nbsp;if&nbsp;true,&nbsp;only&nbsp;rankings&nbsp;data&nbsp;are&nbsp;included.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;reviewer_col_name&nbsp;(str):&nbsp;column&nbsp;name&nbsp;for&nbsp;reviewer&nbsp;names.&nbsp;Default&nbsp;is&nbsp;"Reviewer&nbsp;Name".<br>
+&nbsp;&nbsp;&nbsp;&nbsp;prop_col_name&nbsp;(str):&nbsp;column&nbsp;name&nbsp;for&nbsp;proposal&nbsp;names.&nbsp;Default&nbsp;is&nbsp;"Proposal&nbsp;Name".<br>
+&nbsp;&nbsp;&nbsp;&nbsp;overall_col_name&nbsp;(str):&nbsp;column&nbsp;name&nbsp;for&nbsp;the&nbsp;overall&nbsp;ratings.&nbsp;Default&nbsp;is&nbsp;"Overall&nbsp;Score".<br>
+&nbsp;<br>
+Methods:<br>
+-----<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Rankings-get_rating_df">get_rating_df</a>(rat_name):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;df&nbsp;that&nbsp;contains&nbsp;the&nbsp;overall&nbsp;rating.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Rankings-updated_pairs">updated_pairs</a>(dict,&nbsp;yesno,&nbsp;topk):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Rankings-get_name">get_name</a>(email):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;reviewer&nbsp;with&nbsp;the&nbsp;email.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Rankings-get_sub_rating">get_sub_rating</a>(rat_name,&nbsp;reviewer,&nbsp;prop):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;sub&nbsp;rating&nbsp;of&nbsp;an&nbsp;item.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Rankings-get_all_sub_ratings">get_all_sub_ratings</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;the&nbsp;names&nbsp;of&nbsp;the&nbsp;sub&nbsp;ratings.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Rankings-get_columns">get_columns</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;proposal&nbsp;names.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Rankings-get_all_rankings">get_all_rankings</a>(topk=None):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;rankings&nbsp;for&nbsp;the&nbsp;topk&nbsp;items.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Rankings-get_op_rankings">get_op_rankings</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;overall&nbsp;rankings&nbsp;as&nbsp;dictionary&nbsp;and&nbsp;the&nbsp;maximum&nbsp;length&nbsp;of&nbsp;the&nbsp;rankings.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Rankings-__init__"><strong>__init__</strong></a>(self, rating_df, ranking, ties, rating_names, onlyranks=False, reviewer_col_name='Reviewer Name', prop_col_name='Proposal Name', overall_col_name='Overall Score')</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="Rankings-get_all_rankings"><strong>get_all_rankings</strong></a>(self, topk=None)</dt><dd><span class="code">Returns&nbsp;the&nbsp;rankings&nbsp;for&nbsp;the&nbsp;topk&nbsp;items.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;topk&nbsp;(int,&nbsp;optional):&nbsp;number&nbsp;of&nbsp;top&nbsp;items&nbsp;included.</span></dd></dl>
+
+<dl><dt><a name="Rankings-get_all_sub_ratings"><strong>get_all_sub_ratings</strong></a>(self)</dt><dd><span class="code">Returns&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;the&nbsp;names&nbsp;of&nbsp;the&nbsp;sub&nbsp;ratings.</span></dd></dl>
+
+<dl><dt><a name="Rankings-get_columns"><strong>get_columns</strong></a>(self)</dt><dd><span class="code">Returns&nbsp;the&nbsp;proposal&nbsp;names.</span></dd></dl>
+
+<dl><dt><a name="Rankings-get_name"><strong>get_name</strong></a>(self, email)</dt><dd><span class="code">Returns&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;reviewer&nbsp;with&nbsp;the&nbsp;email.</span></dd></dl>
+
+<dl><dt><a name="Rankings-get_op_rankings"><strong>get_op_rankings</strong></a>(self)</dt><dd><span class="code">Returns&nbsp;the&nbsp;overall&nbsp;rankings&nbsp;as&nbsp;dictionary&nbsp;and&nbsp;the&nbsp;maximum&nbsp;length&nbsp;of&nbsp;the&nbsp;rankings.</span></dd></dl>
+
+<dl><dt><a name="Rankings-get_rating_df"><strong>get_rating_df</strong></a>(self, rat_name)</dt><dd><span class="code">Returns&nbsp;the&nbsp;df&nbsp;that&nbsp;contains&nbsp;the&nbsp;overall&nbsp;rating.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rat_name&nbsp;(str):&nbsp;Name&nbsp;of&nbsp;the&nbsp;sub&nbsp;rating.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;df&nbsp;(pandas.DataFrame):&nbsp;Dataframe&nbsp;containing&nbsp;the&nbsp;overall&nbsp;rating.</span></dd></dl>
+
+<dl><dt><a name="Rankings-get_sub_rating"><strong>get_sub_rating</strong></a>(self, rat_name, reviewer, prop)</dt><dd><span class="code">Returns&nbsp;the&nbsp;sub&nbsp;rating&nbsp;of&nbsp;an&nbsp;item&nbsp;as&nbsp;a&nbsp;string.</span></dd></dl>
+
+<dl><dt><a name="Rankings-updated_pairs"><strong>updated_pairs</strong></a>(self, dict, yesno, topk)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

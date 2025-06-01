@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module Restaurants_Example.rankingTool.java_import</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="Restaurants_Example.html" class="white">Restaurants_Example</a>.<a href="Restaurants_Example.rankingTool.html" class="white">rankingTool</a>.java_import</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/Users/xuliu/Library/CloudStorage/OneDrive-UW/Rankings-UI-main/Restaurants_Example/rankingTool/java_import.py">/Users/xuliu/Library/CloudStorage/OneDrive-UW/Rankings-UI-main/Restaurants_Example/rankingTool/java_import.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="numpy.html">numpy</a><br>
+<a href="os.html">os</a><br>
+</td><td class="multicolumn"><a href="rpy2.robjects.html">rpy2.robjects</a><br>
+<a href="rpy2.robjects.packages.html">rpy2.robjects.packages</a><br>
+</td><td class="multicolumn"><a href="rpy2.robjects.numpy2ri.html">rpy2.robjects.numpy2ri</a><br>
+<a href="subprocess.html">subprocess</a><br>
+</td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="Restaurants_Example.rankingTool.java_import.html#java_import">java_import</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="java_import">class <strong>java_import</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#java_import">java_import</a>(input_path,&nbsp;model_choice,&nbsp;params,&nbsp;rankings_names,&nbsp;directory,&nbsp;nBoot=1)&nbsp;-&amp;gt;&nbsp;None<br>
+&nbsp;<br>
+Class&nbsp;for&nbsp;sending&nbsp;dataset&nbsp;to&nbsp;packages&nbsp;and&nbsp;organizing&nbsp;results.<br>
+&nbsp;<br>
+Attributes:<br>
+-----<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_path&nbsp;(str):&nbsp;Path&nbsp;to&nbsp;the&nbsp;input&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;model_choice&nbsp;(str):&nbsp;Name&nbsp;of&nbsp;the&nbsp;model.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;params&nbsp;(dict):&nbsp;Parameters&nbsp;for&nbsp;the&nbsp;model.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rankings_names&nbsp;(list):&nbsp;Names&nbsp;of&nbsp;the&nbsp;proposals.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;directory&nbsp;(str):&nbsp;Directory&nbsp;for&nbsp;saving&nbsp;the&nbsp;interim&nbsp;files&nbsp;and&nbsp;outputs.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nBoot&nbsp;(int):&nbsp;Number&nbsp;of&nbsp;bootstrap&nbsp;samples.&nbsp;nBoot=1&nbsp;suggests&nbsp;no&nbsp;bootstrap&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Methods:<br>
+-----<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#java_import-execute_java">execute_java</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run&nbsp;java&nbsp;packages&nbsp;for&nbsp;models&nbsp;RIM,&nbsp;Landmarks,&nbsp;GMM&nbsp;and&nbsp;Mallows.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#java_import-gmm_output">gmm_output</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reading&nbsp;and&nbsp;organizing&nbsp;output&nbsp;from&nbsp;the&nbsp;GMM&nbsp;package.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#java_import-routput">routput</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reading&nbsp;and&nbsp;organizing&nbsp;output&nbsp;from&nbsp;the&nbsp;RIM&nbsp;package.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#java_import-rlandmarks">rlandmarks</a>(out=False):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;out=True,&nbsp;organize&nbsp;output&nbsp;from&nbsp;the&nbsp;Landmarks&nbsp;package;&nbsp;otherwise,&nbsp;organize&nbsp;the&nbsp;input.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#java_import-write_gmm_txt">write_gmm_txt</a>(nBoot):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Write&nbsp;the&nbsp;configuration&nbsp;file&nbsp;for&nbsp;GMM&nbsp;package.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#java_import-get_N">get_N</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;in&nbsp;the&nbsp;input&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#java_import-borda">borda</a>(path,&nbsp;type):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compute&nbsp;Borda&nbsp;rankings.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="java_import-__init__"><strong>__init__</strong></a>(self, input_path, model_choice, params, rankings_names, directory, nBoot=1) -&gt; None</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="java_import-borda"><strong>borda</strong></a>(self, path, type)</dt><dd><span class="code">Compute&nbsp;the&nbsp;Borda&nbsp;rankings.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(str):&nbsp;the&nbsp;path&nbsp;of&nbsp;the&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type&nbsp;(str):&nbsp;if&nbsp;type&nbsp;=&nbsp;"Rate",&nbsp;the&nbsp;dataset&nbsp;contains&nbsp;ratings;&nbsp;if&nbsp;type&nbsp;=&nbsp;"Rank",&nbsp;the&nbsp;dataset&nbsp;contains&nbsp;&nbsp;rankings.</span></dd></dl>
+
+<dl><dt><a name="java_import-execute_java"><strong>execute_java</strong></a>(self)</dt><dd><span class="code">Execute&nbsp;the&nbsp;java&nbsp;package&nbsp;and&nbsp;use&nbsp;the&nbsp;correct&nbsp;function&nbsp;for&nbsp;organizing&nbsp;outputs.</span></dd></dl>
+
+<dl><dt><a name="java_import-get_N"><strong>get_N</strong></a>(self)</dt><dd><span class="code">Compute&nbsp;the&nbsp;number&nbsp;of&nbsp;items&nbsp;in&nbsp;the&nbsp;dataset.</span></dd></dl>
+
+<dl><dt><a name="java_import-gmm_output"><strong>gmm_output</strong></a>(self)</dt><dd><span class="code">This&nbsp;function&nbsp;organizes&nbsp;the&nbsp;output&nbsp;from&nbsp;the&nbsp;GMM&nbsp;package.<br>
+If&nbsp;self.<strong>nBoot</strong>&nbsp;&gt;&nbsp;1,&nbsp;the&nbsp;output&nbsp;would&nbsp;be&nbsp;stored&nbsp;to&nbsp;the&nbsp;bootstrap&nbsp;package.</span></dd></dl>
+
+<dl><dt><a name="java_import-rlandmarks"><strong>rlandmarks</strong></a>(self, out=False)</dt><dd><span class="code">This&nbsp;is&nbsp;a&nbsp;function&nbsp;for&nbsp;writing&nbsp;the&nbsp;input&nbsp;and&nbsp;output&nbsp;for&nbsp;the&nbsp;Landmarks&nbsp;algorithm.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;out&nbsp;(bool,&nbsp;optional):&nbsp;If&nbsp;True,&nbsp;write&nbsp;arguments&nbsp;required&nbsp;for&nbsp;the&nbsp;test;&nbsp;otherwise&nbsp;organize&nbsp;the&nbsp;output.</span></dd></dl>
+
+<dl><dt><a name="java_import-routput"><strong>routput</strong></a>(self)</dt><dd><span class="code">This&nbsp;function&nbsp;sorts&nbsp;the&nbsp;output&nbsp;from&nbsp;the&nbsp;RIM&nbsp;package&nbsp;and&nbsp;plot&nbsp;the&nbsp;tree.</span></dd></dl>
+
+<dl><dt><a name="java_import-write_gmm_txt"><strong>write_gmm_txt</strong></a>(self, nBoot=1)</dt><dd><span class="code">Write&nbsp;the&nbsp;parameters&nbsp;into&nbsp;the&nbsp;file&nbsp;for&nbsp;GMM&nbsp;package&nbsp;to&nbsp;run.<br>
+&nbsp;<br>
+Parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nBoot&nbsp;(int):&nbsp;number&nbsp;of&nbsp;bootstrap&nbsp;samples.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>PIPE</strong> = -1<br>
+<strong>STDOUT</strong> = -2</td></tr></table>
+</body></html>
